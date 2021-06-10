@@ -7,4 +7,5 @@ from .models import School, Grade
 
 def index(response,id):
     school = School.objects.get(id=id)
-    return HttpResponse("<h1>erster test: %s</h1>" % school.name)
+    grade = school.grade_set.get(id=1)
+    return HttpResponse("<h1>erster test: %s</h1><p>%s</p>" %(school.name, grade.name))
