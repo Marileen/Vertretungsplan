@@ -4,6 +4,9 @@ Hier entsteht unser Projekt für das Auslesen der Vertretungspläne von Schulen,
 
 ## Nützliche Kommandos
 
+###run server
+<pre>pyhton manage.py runserver</pre>
+
 ###Migrationen hinzufügen:
 <pre>python manage.py makemigrations main</pre>
 
