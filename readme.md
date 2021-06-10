@@ -35,5 +35,16 @@ Hier entsteht unser Projekt für das Auslesen der Vertretungspläne von Schulen,
    //Item-Set abfragen
    s.grade_set.all()
    s.grade_set.get(id=1)
+   s.filter(name__startswith="Ko")
+   //löschen
+   del_object = s.get(id=1)
+   de_object.delete()
 </pre>
 
+
+
+## Admin Dashboard
+<pre>python manage.py createsuperuser</pre>
+user: franz
+email: franz@th-luebeck.de
+pw: fgq5%tth
