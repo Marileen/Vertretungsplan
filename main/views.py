@@ -5,12 +5,13 @@ from .models import School, Grade
 # Create your views here.
 
 
-def index(response,id):
+def index(response, id):
     school = School.objects.get(id=id)
-    grade = school.grade_set.get(id=1)
+    grades = school.grade_set.all()  # it's a QuerySet
     # return HttpResponse("<h1>erster test: %s</h1><p>%s</p>" %(school.name, grade.name))
     return render(response, "main/base.html", {})
 
 
 def start(response):
-    return render(response, "main/start.html", {})
+    schools = School.objects.get()
+    return render(response, "main/start.html", {"schools": schools})
