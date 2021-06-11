@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import School, Grade
-
+from .forms import Subscribe
 # Create your views here.
 
 
@@ -13,5 +13,6 @@ def index(response, id):
 
 
 def start(response):
-    schools = School.objects.get()
-    return render(response, "main/start.html", {"schools": schools})
+    form = Subscribe()
+    schools = School.objects.all()
+    return render(response, "main/start.html", {"schools": schools, "form": form})

@@ -5,7 +5,21 @@
 
 {% block content %}
     <h1>Schule auswählen</h1>
+    <form method="post" action="/subscribe/">
+        {{ form }}
+        <button type="submit" name="subscribe"></button>
+    </form>
+
+
+    <select>
+        {% for school in schools %}
+            <option>{{ school.name }}</option>
+        {% endfor %}
+    </select>
+
+    {% comment %}
     {% for item in schools.grade_set.all %}
             <p>{{ item.name }}</p>
     {% endfor %}
+    {% endcomment %}
 {% endblock %}
