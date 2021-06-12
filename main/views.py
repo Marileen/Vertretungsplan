@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import School, Grade
+from .models import School, Grade, Subscriber
 from .forms import Subscribe
 # Create your views here.
 
@@ -13,6 +13,19 @@ def index(response, id):
 
 
 def start(response):
-    form = Subscribe()
+
     schools = School.objects.all()
+
+    if response.method == "POST":
+        form = Subscribe(response.POST)
+
+        if form.is_valid():
+            firstname = form.cleaned_data["name"]
+            email = form.cleaned_data["email"]
+            phone = form.cleaned_data["phone"]
+            s = Subscriber(name=firstname, email=email, telefon=phone)
+            s.save()
+            # return HttpResponseRedirect('/thanks/')
+    else:
+        form = Subscribe()
     return render(response, "main/start.html", {"schools": schools, "form": form})

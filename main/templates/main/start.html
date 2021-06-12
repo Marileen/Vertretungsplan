@@ -5,9 +5,10 @@
 
 {% block content %}
     <h1>Schule auswählen</h1>
-    <form method="post" action="/subscribe/">
-        {{ form }}
-        <button type="submit" name="subscribe"></button>
+    <form method="post" action="/">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" name="subscribe">Registrieren</button>
     </form>
 
 

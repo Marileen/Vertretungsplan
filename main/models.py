@@ -19,8 +19,8 @@ class Grade(models.Model):
 
 class Subscriber(models.Model):
     name = models.CharField(max_length=200)
-    email = models.CharField(max_length=200)
-    telefon = models.CharField(max_length=200)
+    email = models.CharField(max_length=200, unique=True)
+    telefon = models.CharField(max_length=200, unique=True)
 
     def __str__(self):
         return self.name
