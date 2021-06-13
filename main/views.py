@@ -17,21 +17,21 @@ def index(response, id):
 def start(response):
 
     schools = School.objects.all()
+    form_subscribe = Subscribe(response.POST)
 
     if response.method == "POST":
-        form = Subscribe(response.POST)
 
-        if form.is_valid():
-            firstname = form.cleaned_data["name"]
-            email = form.cleaned_data["email"]
-            phone = form.cleaned_data["phone"]
+        if form_subscribe.is_valid():
+            firstname = form_subscribe.cleaned_data["name"]
+            email = form_subscribe.cleaned_data["email"]
+            phone = form_subscribe.cleaned_data["phone"]
             subscr = Subscriber(name=firstname, email=email, telefon=phone)
 
             try:
                 subscr.save()
 
                 # create a subscription for the user for a school
-                school = form.cleaned_data["school"]
+                school = form_subscribe.cleaned_data["school"]
                 subscription = Subscription(school=school, subscriber=subscr)
                 subscription.save()
 
@@ -39,11 +39,10 @@ def start(response):
                 if 'unique constraint' in e.args[0]:  # or e.args[0] from Django 1.10
                     return HttpResponseRedirect('/duplicate/')
 
-            messages.success(response, "Erfolgreich angemeldet für <strong>" + str(form.cleaned_data["school"]) + "</strong>")
+            messages.success(response, "Erfolgreich angemeldet für <strong>" + str(form_subscribe.cleaned_data["school"]) + "</strong>")
             return HttpResponseRedirect('/thanks/')
-    else:
-        form = Subscribe()
-    return render(response, "main/start.html", {"schools": schools, "form": form})
+
+    return render(response, "main/start.html", {"schools": schools, "form": form_subscribe})
 
 
 def thanks(response):
