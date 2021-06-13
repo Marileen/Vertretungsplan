@@ -12,13 +12,6 @@
         <button type="submit" name="subscribe">Registrieren</button>
     </form>
 
-
-    <select>
-        {% for school in schools %}
-            <option>{{ school.name }}</option>
-        {% endfor %}
-    </select>
-
     {% comment %}
     {% for item in schools.grade_set.all %}
             <p>{{ item.name }}</p>
