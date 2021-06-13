@@ -42,7 +42,7 @@ def start(response):
             messages.success(response, "Erfolgreich angemeldet für <strong>" + str(form_subscribe.cleaned_data["school"]) + "</strong>")
             return HttpResponseRedirect('/thanks/')
 
-    return render(response, "main/start.html", {"schools": schools, "form": form_subscribe})
+    return render(response, "main/start.html", {"schools": schools, "form_subscribe": form_subscribe})
 
 
 def thanks(response):
