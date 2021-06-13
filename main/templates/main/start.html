@@ -4,7 +4,8 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Schule auswählen</h1>
+    <h1>Vertretungsplan Registrierung</h1>
+    <h2>Schule auswählen</h2>
     <form method="post" action="/">
         {% csrf_token %}
         {{ form.as_p }}
