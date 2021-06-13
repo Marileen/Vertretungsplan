@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import School, Grade, Subscriber, Subscription
-from .forms import Subscribe
+from .forms import Subscribe, Subscriptions
 from django.db import IntegrityError
 from django.contrib import messages
 # Create your views here.
@@ -39,12 +39,18 @@ def start(response):
                 if 'unique constraint' in e.args[0]:  # or e.args[0] from Django 1.10
                     return HttpResponseRedirect('/duplicate/')
 
-            messages.success(response, "Erfolgreich angemeldet für <strong>" + str(form_subscribe.cleaned_data["school"]) + "</strong>")
+            messages.success(response, "Erfolgreich angemeldet für <strong>"
+                             + str(form_subscribe.cleaned_data["school"]) + "</strong>")
             return HttpResponseRedirect('/thanks/')
 
     return render(response, "main/start.html", {"schools": schools, "form_subscribe": form_subscribe})
 
 
+def edit(response):
+    return render(response, "main/edit-subscriptions.html", {})
+
+
 def thanks(response):
-    return render(response, "main/thanks.html", {})
+    subscriptions_form = Subscriptions(response.POST)
+    return render(response, "main/thanks.html", {"form_subscriptions": subscriptions_form})
 

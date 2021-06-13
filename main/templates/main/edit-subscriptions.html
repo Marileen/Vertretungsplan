@@ -1,0 +1,21 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    Start
+{% endblock %}
+
+{% block content %}
+    <h1>Vertretungsplan</h1>
+    <h2>Abfrage der Anmeldungen</h2>
+    <p>Gib Deine E-Mail-Adresse oder Telefonnummer ein um deine Registrierungen abzufragen</p>
+    <form method="post" action="/edit-subscriptions">
+        {% csrf_token %}
+        {{ form_subscriptions.as_p }}
+        <button type="submit" name="find">Abfrage</button>
+    </form>
+
+    {% comment %}
+    {% for item in schools.grade_set.all %}
+            <p>{{ item.name }}</p>
+    {% endfor %}
+    {% endcomment %}
+{% endblock %}
