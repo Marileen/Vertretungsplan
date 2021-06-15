@@ -4,6 +4,7 @@ from .models import School, Grade, Subscriber, Subscription
 from .forms import Subscribe, Subscriptions
 from django.db import IntegrityError
 from django.contrib import messages
+from django.core.mail import EmailMessage
 # Create your views here.
 
 
@@ -34,6 +35,9 @@ def start(response):
                 school = form_subscribe.cleaned_data["school"]
                 subscription = Subscription(school=school, subscriber=subscr)
                 subscription.save()
+
+                emailconfirm = EmailMessage('Anmeldebestätigung', 'Body', to= [ email ])
+                emailconfirm.send()
 
             except IntegrityError as e:
                 if 'unique constraint' in e.args[0]:  # or e.args[0] from Django 1.10
