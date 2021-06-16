@@ -2,12 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    <style>
+        h2 {
+            background-color: #444444;
+            color: #ffffff;
+            padding: 10px 10px 12px 10px;
+            margin-bottom: 25px;
+        }
+
+        .sidenav {
+            float: left;
+            height: 100vh;
+            padding: 30px;
+            background-color: #444444;
+            color: #fff;
+        }
+
+        .sidenav a {
+            color: #fff;
+        }
+    </style>
     <title>{% block title %}Vertretungsplan abfragen{% endblock %}</title>
 </head>
 <body>
-    <div id="content">
+<div class="sidenav">
+    <a href="start">Registrieren</a>
+    <a href="edit-subscriptions">Editieren</a>
+</div>
+
+<div class="row justify-content-center" id="content">
+    <div class="col-8">
+        <h1 class="text-center">Vertretungsplan</h1>
+        <hr class="mb-4">
         {% block content %}
         {% endblock %}
     </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+        crossorigin="anonymous"></script>
+
 </body>
 </html>
