@@ -25,14 +25,21 @@
 
         .sidenav a {
             color: #fff;
+            text-decoration: none;
+            font-size: 26px;
+            display: block;
+        }
+
+        ul.errorlist {
+            display: none;
         }
     </style>
     <title>{% block title %}Vertretungsplan abfragen{% endblock %}</title>
 </head>
 <body>
 <div class="sidenav">
-    <a href="start">Registrieren</a>
-    <a href="edit-subscriptions">Editieren</a>
+    <a href="/start">Registrieren</a>
+    <a href="/edit-subscriptions">Editieren</a>
 </div>
 
 <div class="row justify-content-center" id="content">

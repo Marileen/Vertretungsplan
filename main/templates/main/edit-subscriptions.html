@@ -5,12 +5,15 @@
 
 {% block content %}
     <h2>Abfrage der Anmeldungen</h2>
-    <p>Gib Deine E-Mail-Adresse oder Telefonnummer ein um deine Registrierungen abzufragen</p>
-    <form method="post" action="/edit-subscriptions">
+    <p>Gib Deine E-Mail-Adresse ein, um deine Registrierungen abzufragen</p>
+    <form method="post" action="/edit-subscriptions/">
         {% csrf_token %}
         {{ form_subscriptions.as_p }}
-        <button type="submit" name="find">Abfrage</button>
+        <button type="submit" name="find" class="btn btn-info">Abfrage</button>
     </form>
+
+    <p>{{ result.info }}</p>
+    <p>{{ result.name }}</p>
 
     {% comment %}
     {% for item in schools.grade_set.all %}

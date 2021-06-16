@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import School, Grade, Subscriber, Subscription
 from .forms import Subscribe, Subscriptions
 from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.core.mail import EmailMessage
 # Create your views here.
@@ -51,7 +52,28 @@ def start(response):
 
 
 def edit(response):
-    return render(response, "main/edit-subscriptions.html", {})
+    subscriptions_form = Subscriptions(response.POST)
+    result = '---'
+
+    if response.method == "POST":
+        result = {
+            "info": 'Eingabe nicht korrekt',
+            "name": ''
+        }
+
+        if subscriptions_form.is_valid():
+            email = subscriptions_form.cleaned_data["email"]
+
+            # Django DB Query
+            try:
+                subscriber = Subscriber.objects.get(email=email)
+                result["name"] = Subscription.objects.get(subscriber=subscriber)
+                result["info"] = "Folgende Einträge gefunden"
+            except ObjectDoesNotExist as e:
+                if 'not exist' in e.args[0]:  # or e.args[0] from Django 1.10
+                    result["info"] = "Keine Daten gefunden"
+
+    return render(response, "main/edit-subscriptions.html", {"form_subscriptions": subscriptions_form, "result": result})
 
 
 def thanks(response):

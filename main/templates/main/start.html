@@ -9,7 +9,7 @@
     <form method="post" action="/">
         {% csrf_token %}
         {{ form_subscribe.as_p }}
-        <button type="submit" name="subscribe">Registrieren</button>
+        <button type="submit" name="subscribe" class="btn btn-info">Registrieren</button>
     </form>
 
     {% comment %}
