@@ -106,3 +106,4 @@ GitHub.sublime-settings
 /.idea/inspectionProfiles/profiles_settings.xml
 /.idea/vcs.xml
 /.idea/Vertretungsplan.iml
+/Vertretungsplan/secret.py
