@@ -28,7 +28,7 @@ def sendmail():
 
     for i in recipients:
 
-        emailtest = EmailMessage('Testversand', 'Body', to=[i.email])
+        emailtest = EmailMessage('Testversand', 'Hallo ' + i.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.email])
         emailtest.attach_file('./downloads/' + date +".pdf")
         emailtest.send()
 
