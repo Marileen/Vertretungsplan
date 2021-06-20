@@ -22,13 +22,15 @@ def filedownload():
 
 def sendmail():
 
+    # send mails with pdf attachment to "Kopernikus Gymnasium" subscribers
     # date = datetime.today().strftime('%Y-%m-%d') # aktuelles Tagesdatum
     date = '2021-06-11'  # Testdatum
-    recipients = Subscriber.objects.all()
+    school_kopernikus = School.objects.get(name__contains='Kopernikus Gymnasium Bargteheide')
+    subscriptions_kopernikus = Subscription.objects.filter(school=school_kopernikus)
 
-    for i in recipients:
+    for i in subscriptions_kopernikus:
 
-        emailtest = EmailMessage('Testversand', 'Hallo ' + i.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.email])
+        emailtest = EmailMessage('Testversand', 'Hallo ' + i.subscriber.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
         emailtest.attach_file('./downloads/' + date +".pdf")
         emailtest.send()
 

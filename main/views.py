@@ -114,15 +114,9 @@ def send(response):
 
     all_subscriptions = Subscription.objects.all()
 
-    # if all_subscriptions.exists():
-    #     # Another database query to start fetching the rows in batches.
-    #     for sub in all_subscriptions.iterator():
-    #         print(sub.school)
-
     if response.method == "POST":
-        if response.POST.get("test"):
+        if response.POST.get("send"):
             filedownload()
-        elif response.POST.get("send"):
             sendmail()
 
     return render(response, "main/send-messages.html", {
