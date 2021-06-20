@@ -9,5 +9,6 @@ urlpatterns = [
     path("", views.start, name="start"),
     path("start/", views.start, name="start"),
     path("thanks/", views.thanks, name="fertig"),
-    path("edit-subscriptions/", views.edit, name="editieren")
+    path("edit-subscriptions/", views.edit, name="editieren"),
+    path("send-messages/", views.send, name="Testmodus: senden")
 ]

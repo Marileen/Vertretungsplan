@@ -108,3 +108,7 @@ def thanks(response):
     subscriptions_form = Subscriptions(response.POST)
     return render(response, "main/thanks.html", {"form_subscriptions": subscriptions_form})
 
+
+def send(response):
+    return render(response, "main/send-messages.html", {})
+

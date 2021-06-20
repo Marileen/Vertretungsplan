@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    Start
+{% endblock %}
+
+{% block content %}
+    <h2>Demo- und Testoberfläche zum Auslösen des Versandes</h2>
+    <p>Ein Cronjob löst normalerweise den Versand aus</p>
+    <p>Es kann aber für die Demo des Projektes
+        über diesen Button getriggert werden.</p>
+
+    <form method="post" action="/send-messages/">
+        {% csrf_token %}
+        <button type="submit" name="send" class="btn btn-info">Nachrichten versenden</button>
+    </form>
+
+{% endblock %}

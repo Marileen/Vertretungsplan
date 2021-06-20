@@ -12,6 +12,10 @@
         <button type="submit" name="subscribe" class="btn btn-info">Registrieren</button>
     </form>
 
+    <p></p>
+    <p>Todo: Man kann sich momentan mehrmals mit demselben Subscriber für die dieselbe Schule anmelden,
+        das sollten wir noch verhindern</p>
+
     {% comment %}
     {% for item in schools.grade_set.all %}
             <p>{{ item.name }}</p>
