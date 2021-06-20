@@ -7,7 +7,7 @@ class Subscribe(forms.Form):
     school = forms.ModelChoiceField(queryset=School.objects.all())
 
     name = forms.CharField(label="Name", max_length=200)
-    email = forms.EmailField(label="E-Mail", max_length=200, required=0)
+    email = forms.EmailField(label="E-Mail", max_length=200)
     phone = forms.CharField(label="Telefon", max_length=200, required=0)
 
     def clean(self):

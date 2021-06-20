@@ -63,26 +63,44 @@ def start(response):
 def edit(response):
     subscriptions_form = Subscriptions(response.POST)
     info = '---'
-    subscriber = None
     entries = None
+    email = ''
 
     if response.method == "POST":
-        if subscriptions_form.is_valid():
+
+        # LÖSCHEN
+        if response.POST.get("delete_subscription"):
+            subscriber = Subscriber.objects.get(email=response.POST.get("subscriber"))
+            school = School.objects.get(name=response.POST.get("school"))
+            try:
+                del_subscr = Subscription.objects.get(subscriber=subscriber, school=school)
+                del_subscr.delete()
+                info = str(school) + " gelöscht"
+            except Exception as e:
+                raise e
+                info = "Fehler - Löschung konnte nicht durchgeführt werden"
+
+        # ABFRAGEN
+        elif response.POST.get("email") and subscriptions_form.is_valid():
             email = subscriptions_form.cleaned_data["email"]
+            info = "Keine Daten gefunden"
 
             # Django DB Query
             try:
-                subscriber = Subscriber.objects.filter(email=email)
+                subscriber = Subscriber.objects.get(email=email)
                 entries = Subscription.objects.filter(subscriber=subscriber)
-                info = "Folgende Einträge gefunden"
+                if entries and len(entries) > 0:
+                     info = "Folgende Einträge gefunden"
             except ObjectDoesNotExist as e:
-                if 'not exist' in e.args[0]:  # or e.args[0] from Django 1.10
-                    info = "Keine Daten gefunden"
+                pass
+                # if 'not exist' in e.args[0]:  # or e.args[0] from Django 1.10
+                    # info = "nix"
 
     return render(response, "main/edit-subscriptions.html", {
         "form_subscriptions": subscriptions_form,
         "info": info,
-        "school": entries  # entry.school if entry else None
+        "entries": entries,  # entry.school if entry else None
+        "subscriber": email
     })
 
 

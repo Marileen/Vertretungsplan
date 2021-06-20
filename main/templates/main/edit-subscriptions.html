@@ -13,10 +13,21 @@
     </form>
 
     <p>{{ info }}</p>
-    {{ entries }}
+
+
     {% for entry in entries %}
-        <p>{{ entry }}</p>
+        <form method="post" action="/edit-subscriptions/">
+            {% csrf_token %}
+            <p>
+                <input type="hidden" name="subscriber" value="{{ subscriber }}">
+                <input type="hidden" name="school" value="{{ entry }}">
+                <button type="submit" name="delete_subscription" value="delete" class="btn btn-danger btn-sm">X</button>
+                <strong>{{ entry }}</strong>
+            </p>
+        </form>
     {% endfor %}
+
+
 
     {% comment %}
     {% for item in schools.grade_set.all %}
