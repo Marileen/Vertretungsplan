@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 class School(models.Model):
@@ -20,7 +20,7 @@ class Grade(models.Model):
 class Subscriber(models.Model):
     name = models.CharField(max_length=200)
     email = models.CharField(max_length=200, unique=True)
-    telefon = models.CharField(max_length=200, unique=True)
+    phone = models.CharField(max_length=200, unique=True)
 
     def __str__(self):
         return self.name
@@ -29,3 +29,6 @@ class Subscriber(models.Model):
 class Subscription(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     subscriber = models.ForeignKey(Subscriber, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.school.name

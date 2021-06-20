@@ -12,8 +12,11 @@
         <button type="submit" name="find" class="btn btn-info">Abfrage</button>
     </form>
 
-    <p>{{ result.info }}</p>
-    <p>{{ result.name }}</p>
+    <p>{{ info }}</p>
+    {{ entries }}
+    {% for entry in entries %}
+        <p>{{ entry }}</p>
+    {% endfor %}
 
     {% comment %}
     {% for item in schools.grade_set.all %}
