@@ -6,7 +6,7 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.core.mail import EmailMessage
-# Create your views here.
+from .services import filedownload
 
 
 def index(response, id):
@@ -110,5 +110,19 @@ def thanks(response):
 
 
 def send(response):
-    return render(response, "main/send-messages.html", {})
+
+    all_subscriptions = Subscription.objects.all()
+
+    # if all_subscriptions.exists():
+    #     # Another database query to start fetching the rows in batches.
+    #     for sub in all_subscriptions.iterator():
+    #         print(sub.school)
+
+    if response.method == "POST":
+        if response.POST.get("test"):
+            filedownload()
+
+    return render(response, "main/send-messages.html", {
+        "sub": all_subscriptions
+    })
 

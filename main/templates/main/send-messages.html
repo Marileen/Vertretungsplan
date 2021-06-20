@@ -11,7 +11,36 @@
 
     <form method="post" action="/send-messages/">
         {% csrf_token %}
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Telefon</th>
+                <th scope="col">Schule</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for s in sub %}
+                <tr>
+                    <td>
+                        <input type="checkbox" name="" checked disabled>
+                        <input type="hidden" name="subscriber" value="{{ s.subscriber.email }}">
+                    </td>
+                    <td><p>{{ s.subscriber.name }}</p></td>
+                    <td><p>{{ s.subscriber.email }}</p></td>
+                    <td><p>{{ s.subscriber.phone }}</p></td>
+                    <td><p>{{ s.school }}</p></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
         <button type="submit" name="send" class="btn btn-info">Nachrichten versenden</button>
+        <button type="submit" name="test" value="download" class="btn btn-info">Test Filedownload</button>
     </form>
 
 {% endblock %}
