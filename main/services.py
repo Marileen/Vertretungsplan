@@ -4,7 +4,7 @@ from main.models import *
 from datetime import datetime
 
 
-def filedownload():
+def filedownload_kopernicus():
 
     # date = datetime.today().strftime('%Y-%m-%d') # aktuelles Tagesdatum
     date = '2021-06-11'  # Testdatum
@@ -15,7 +15,23 @@ def filedownload():
         pdf = f.read()
 
     if url.find('/'):
-        filename = 'downloads/' + url.rsplit('/', 1)[1]
+        filename = 'downloads/kopernicus/' + url.rsplit('/', 1)[1]
+    open(filename, 'wb').write(pdf)
+    print('Datei ' + filename + ' heruntergeladen')
+
+
+def filedownload_warbel():
+
+    # date = datetime.today().strftime('%d.%m.%Y') # aktuelles Tagesdatum
+    date = '11.06.2021'  # Testdatum
+
+    url = 'http://www.warbel-schule-gnoien.de/.cm4all/uproc.php/0/' + date + '.pdf'
+
+    with urllib.request.urlopen(url) as f:
+        pdf = f.read()
+
+    if url.find('/'):
+        filename = 'downloads/warbel/' + url.rsplit('/', 1)[1]
     open(filename, 'wb').write(pdf)
     print('Datei ' + filename + ' heruntergeladen')
 
@@ -31,6 +47,16 @@ def sendmail():
     for i in subscriptions_kopernikus:
 
         emailtest = EmailMessage('Testversand', 'Hallo ' + i.subscriber.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
-        emailtest.attach_file('./downloads/' + date +".pdf")
+        emailtest.attach_file('./downloads/kopernicus/' + date +".pdf")
         emailtest.send()
 
+
+    date_warbel = '11.06.2021'  # Testdatum
+    school_warbel = School.objects.get(name__contains='Warbel-Schule Gnoien')
+    subscriptions_warbel = Subscription.objects.filter(school=school_warbel)
+
+    for i in subscriptions_warbel:
+
+        emailtest = EmailMessage('Testversand', 'Hallo ' + i.subscriber.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
+        emailtest.attach_file('./downloads/warbel/' + date_warbel +".pdf")
+        emailtest.send()

@@ -6,7 +6,9 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.core.mail import EmailMessage
-from .services import filedownload
+from .services import filedownload_kopernicus
+from .services import filedownload_warbel
+
 from .services import sendmail
 
 
@@ -116,7 +118,8 @@ def send(response):
 
     if response.method == "POST":
         if response.POST.get("send"):
-            filedownload()
+            filedownload_kopernicus()
+            filedownload_warbel()
             sendmail()
 
     return render(response, "main/send-messages.html", {
