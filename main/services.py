@@ -4,7 +4,7 @@ from main.models import *
 from datetime import datetime
 
 
-def filedownload_kopernicus():
+def filedownload_kopernikus():
 
     # date = datetime.today().strftime('%Y-%m-%d') # aktuelles Tagesdatum
     date = '2021-06-11'  # Testdatum
@@ -15,7 +15,7 @@ def filedownload_kopernicus():
         pdf = f.read()
 
     if url.find('/'):
-        filename = 'downloads/kopernicus/' + url.rsplit('/', 1)[1]
+        filename = 'downloads/kopernikus/' + url.rsplit('/', 1)[1]
     open(filename, 'wb').write(pdf)
     print('Datei ' + filename + ' heruntergeladen')
 
@@ -47,7 +47,7 @@ def sendmail():
     for i in subscriptions_kopernikus:
 
         emailtest = EmailMessage('Testversand', 'Hallo ' + i.subscriber.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
-        emailtest.attach_file('./downloads/kopernicus/' + date +".pdf")
+        emailtest.attach_file('./downloads/kopernikus/' + date +".pdf")
         emailtest.send()
 
 
@@ -59,4 +59,17 @@ def sendmail():
 
         emailtest = EmailMessage('Testversand', 'Hallo ' + i.subscriber.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
         emailtest.attach_file('./downloads/warbel/' + date_warbel +".pdf")
+        emailtest.send()
+
+def sendmail2(schoolname, directory, date):
+
+    # send mails with pdf attachment to "Kopernikus Gymnasium" subscribers
+    # date = datetime.today().strftime('%Y-%m-%d') # aktuelles Tagesdatum
+    school = School.objects.get(name__contains=schoolname)
+    subscriptions = Subscription.objects.filter(school=school)
+
+    for i in subscriptions:
+
+        emailtest = EmailMessage('Testversand', 'Hallo ' + i.subscriber.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
+        emailtest.attach_file('./downloads/' +directory +'/' + date +'.pdf')
         emailtest.send()

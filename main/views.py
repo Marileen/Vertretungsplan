@@ -6,10 +6,10 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.core.mail import EmailMessage
-from .services import filedownload_kopernicus
+from .services import filedownload_kopernikus
 from .services import filedownload_warbel
 
-from .services import sendmail
+from .services import sendmail2
 
 
 def index(response, id):
@@ -118,9 +118,11 @@ def send(response):
 
     if response.method == "POST":
         if response.POST.get("send"):
-            filedownload_kopernicus()
+            filedownload_kopernikus()
             filedownload_warbel()
-            sendmail()
+            #sendmail()
+            sendmail2('Kopernikus Gymnasium Bargteheide', 'kopernikus', '2021-06-11')
+            sendmail2('Warbel-Schule Gnoien', 'warbel', '11.06.2021')
 
     return render(response, "main/send-messages.html", {
         "sub": all_subscriptions
