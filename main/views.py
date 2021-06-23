@@ -1,28 +1,39 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.http import JsonResponse
 from .models import School, Grade, Subscriber, Subscription
 from .forms import Subscribe, Subscriptions
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.core.mail import EmailMessage
-from .services import filedownload_kopernikus
-from .services import filedownload_warbel
+from .services import filedownload_kopernikus, filedownload_warbel, VPlan
 
 from .services import sendmail2
 
 
 def index(response, id):
     school = School.objects.get(id=id)
-    grades = school.grade_set.all()  # it's a QuerySet
     # return HttpResponse("<h1>erster test: %s</h1><p>%s</p>" %(school.name, grade.name))
     return render(response, "main/base.html", {})
+
+
+def fetch_grades(request):
+    school_id = request.POST.get('school_id', None)
+    school = School.objects.filter(id=school_id)
+    data = {
+        'grades': 'test'  # School.objects. # todo: get grades from db - fill db previously ...
+    }
+    return JsonResponse(data)
 
 
 def start(response):
 
     schools = School.objects.all()
     form_subscribe = Subscribe(response.POST)
+
+    # todo: fetch vplan in service when sending ist triggered and school has subscribers for it
+    vplan_kellinghusen = VPlan('kellinghusen', 'https://gms-kellinghusen.de/vertretungsplan.html')
 
     if response.method == "POST":
 

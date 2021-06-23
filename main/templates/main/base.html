@@ -62,5 +62,46 @@
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
         crossorigin="anonymous"></script>
 
+{% block javascript %}
+  <script>
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+      async function postData(url = '', data = {}) {
+          // Default options are marked with *
+          const response = await fetch(url, {
+              method: 'POST', // *GET, POST, PUT, DELETE, etc.
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRFToken': getCookie('csrftoken'),
+              },
+              body: JSON.stringify(data) // body data type must match "Content-Type" header
+          });
+          return response.json(); // parses JSON response into native JavaScript objects
+      }
+
+      document.querySelector('#id_school').addEventListener('change', function () {
+          postData('/fetch-grades/', {school_id: this.value})
+              .then(data => {
+                  console.log(data); // JSON data parsed by `data.json()` call
+              });
+      });
+  </script>
+{% endblock %}
+
 </body>
 </html>
