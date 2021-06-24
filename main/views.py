@@ -7,7 +7,8 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.core.mail import EmailMessage
-from .services import filedownload_kopernikus, filedownload_warbel, VPlan
+from .services import filedownload_kopernikus, filedownload_warbel
+from .vplan import VPlan
 
 from .services import sendmail2
 
@@ -19,11 +20,21 @@ def index(response, id):
 
 
 def fetch_grades(request):
-    school_id = request.POST.get('school_id', None)
-    school = School.objects.filter(id=school_id)
-    data = {
-        'grades': 'test'  # School.objects. # todo: get grades from db - fill db previously ...
-    }
+    data = None
+
+    if request.method == "POST":
+        import json
+        post_data = json.loads(request.body.decode("utf-8"))
+        school_id = post_data.get("school_id")
+        school = School.objects.get(id=school_id)
+
+        # todo: also fetch vplan in a service when sending ist triggered and school has subscribers for it
+        vplan = VPlan(school.name, school.url)
+
+        data = {
+            'grades': vplan.grades  # School.objects. # todo: get grades from db - fill db previously ...
+        }
+
     return JsonResponse(data)
 
 
@@ -31,9 +42,6 @@ def start(response):
 
     schools = School.objects.all()
     form_subscribe = Subscribe(response.POST)
-
-    # todo: fetch vplan in service when sending ist triggered and school has subscribers for it
-    vplan_kellinghusen = VPlan('kellinghusen', 'https://gms-kellinghusen.de/vertretungsplan.html')
 
     if response.method == "POST":
 

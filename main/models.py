@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 # Create your models here.
 class School(models.Model):
     name = models.CharField(max_length=200)
+    url = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return self.name

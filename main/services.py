@@ -1,37 +1,7 @@
 import urllib.request
 from django.core.mail import EmailMessage
-from bs4 import BeautifulSoup
 from main.models import *
 from datetime import datetime
-
-
-class VPlan:
-    def __init__(self, name, url):
-        self.website = self.gethtml('https://gms-kellinghusen.de/vertretungsplan.html')
-        self.name = name
-        self.grades = self.getGrades()
-
-    def gethtml(self, url):
-        # url = 'https://gms-kellinghusen.de/vertretungsplan.html'
-
-        with urllib.request.urlopen(url) as f:
-            plan = f.read()
-
-        soup = BeautifulSoup(plan, 'html.parser')
-        return soup
-
-    def getGrades(self):
-
-        grades = []
-        grade_nodes = self.website.select('.v-klasse')
-
-        for grade in grade_nodes:
-            grades.append(grade.text)
-
-        print(grades)
-
-        return grades
-
 
 
 def filedownload_kopernikus():
@@ -90,6 +60,7 @@ def sendmail():
         emailtest = EmailMessage('Testversand', 'Hallo ' + i.subscriber.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
         emailtest.attach_file('./downloads/warbel/' + date_warbel +".pdf")
         emailtest.send()
+
 
 def sendmail2(schoolname, directory, date):
 
