@@ -97,7 +97,17 @@
       document.querySelector('#id_school').addEventListener('change', function () {
           postData('/fetch-grades/', {school_id: this.value})
               .then(data => {
-                  console.log(data); // JSON data parsed by `data.json()` call
+                  let select = document.getElementById("id_grade");
+
+                  for (let i = 0; i < data.grades.length; i++) {
+                      let opt = data.grades[i];
+                      let el = document.createElement("option");
+                      el.textContent = opt;
+                      el.value = opt;
+                      select.appendChild(el);
+                  }
+
+                  select.classList.remove('d-none')
               });
       });
   </script>

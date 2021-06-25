@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import JsonResponse
-from .models import School, Grade, Subscriber, Subscription
+from .models import School, Subscriber, Subscription
 from .forms import Subscribe, Subscriptions
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
