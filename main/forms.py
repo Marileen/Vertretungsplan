@@ -6,7 +6,7 @@ class Subscribe(forms.Form):
     schools = School.objects.all()
     school = forms.ModelChoiceField(queryset=School.objects.all())
 
-    grade = forms.ChoiceField(label='', required=0, widget=forms.Select(attrs={'class': 'd-none', 'title': 'Klasse'}))
+    # grade = forms.ChoiceField(label='', required=0, widget=forms.Select(attrs={'class': 'd-none', 'title': 'Klasse'}))
 
     name = forms.CharField(label="Name", max_length=200)
     email = forms.EmailField(label="E-Mail", max_length=200)

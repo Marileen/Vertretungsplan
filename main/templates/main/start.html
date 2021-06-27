@@ -5,12 +5,12 @@
 
 {% block styles %}
     .control-group {
-            margin: 10px 0 10px 0;
-        }
-        .help-inline {
-            color: grey;
-            font-size: 12px;
-        }
+    margin: 10px 0 10px 0;
+    }
+    .help-inline {
+    color: grey;
+    font-size: 12px;
+    }
 {% endblock %}
 
 {% block content %}
@@ -23,33 +23,33 @@
         {% endcomment %}
 
         <fieldset>
-        <legend>{{ title }}</legend>
-        {% for field in form_subscribe %}
-            {% if field.errors %}
-                <div class="control-group error">
-                    {% if field.label %}
-                        <label class="control-label">{{ field.label }}</label>
-                    {% endif %}
-                    <div class="controls}">{{ field }}
-                        <span class="help-inline">
+            <legend>{{ title }}</legend>
+            {% for field in form_subscribe %}
+                {% if field.errors %}
+                    <div class="control-group error">
+                        {% if field.label %}
+                            <label class="control-label">{{ field.label }}</label>
+                        {% endif %}
+                        <div class="controls">{{ field }}
+                            <span class="help-inline">
                             {% for error in  field.errors %}{{ error }}{% endfor %}
                         </span>
+                        </div>
                     </div>
-                </div>
-            {% else %}
-                <div class="control-group">
-                    {% if field.label %}
-                        <label class="control-label">{{ field.label }}</label>
-                    {% endif %}
-                    <div class="controls">{{ field }}
-                        {% if field.help_text %}
-                            <p class="help-inline"><small>{{ field.help_text }}</small></p>
+                {% else %}
+                    <div class="control-group">
+                        {% if field.label %}
+                            <label class="control-label">{{ field.label }}</label>
                         {% endif %}
+                        <div class="controls">{{ field }}
+                            {% if field.help_text %}
+                                <p class="help-inline"><small>{{ field.help_text }}</small></p>
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
-            {% endif %}
-        {% endfor %}
-    </fieldset>
+                {% endif %}
+            {% endfor %}
+        </fieldset>
         <div class="control-group">
             <button type="submit" name="subscribe" class="btn btn-info">Registrieren</button>
         </div>
@@ -61,56 +61,80 @@
 {% endblock %}
 
 {% block javascript %}
-  <script>
+    <script>
 
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
             }
+            return cookieValue;
         }
-    }
-    return cookieValue;
-}
 
-  async function postData(url = '', data = {}) {
-      // Default options are marked with *
-      const response = await fetch(url, {
-          method: 'POST', // *GET, POST, PUT, DELETE, etc.
-          headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': getCookie('csrftoken'),
-          },
-          body: JSON.stringify(data) // body data type must match "Content-Type" header
-      });
-      return response.json(); // parses JSON response into native JavaScript objects
-  }
+        async function postData(url = '', data = {}) {
+            // Default options are marked with *
+            const response = await fetch(url, {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: JSON.stringify(data) // body data type must match "Content-Type" header
+            });
+            return response.json(); // parses JSON response into native JavaScript objects
+        }
 
-  document.querySelector('#id_school').addEventListener('change', function () {
-      postData('/fetch-grades/', {school_id: this.value})
-          .then(data => {
+        function registerFormChange() {
+            postData('/fetch-grades/', {school_id: document.querySelector('#id_school').value})
+                .then(data => {
 
-              let select = document.getElementById("id_grade")
-              select.classList.add('d-none');
+                    let select = document.getElementById("id_grade")
+                    let gradeContainer = document.createElement("div");
 
-              if (data.length > 0) {
-                  for (let i = 0; i < data.grades.length; i++) {
-                      let opt = data.grades[i];
-                      let el = document.createElement("option");
-                      el.textContent = opt;
-                      el.value = opt;
-                      select.appendChild(el);
-                  }
-                  select.classList.remove('d-none')
-              }
+                    if (select) {
+                        select.required = false;
+                        select.classList.add('d-none')
+                    }
 
-          });
-  });
-  </script>
+                    if (data.grades && data.grades.length > 0) {
+
+                        if (!select) {
+                            select = document.createElement("select");
+                            select.name = 'grade'
+                            gradeContainer.classList.add('control-group');
+                            gradeContainer.appendChild(select);
+                            document.getElementById('id_school').closest('.control-group').append(gradeContainer)
+                        }
+
+                        select.id = "id_grade";
+                        select.required = true;
+
+                        for (let i = 0; i < data.grades.length; i++) {
+                            let opt = data.grades[i];
+                            let el = document.createElement("option");
+                            el.textContent = opt;
+                            el.value = opt;
+                            select.appendChild(el);
+                        }
+                        select.classList.remove('d-none')
+                    }
+
+                });
+        }
+
+        document.querySelector('#id_school').addEventListener('change', registerFormChange);
+
+        (function () {
+            registerFormChange();
+        })();
+
+    </script>
 {% endblock %}

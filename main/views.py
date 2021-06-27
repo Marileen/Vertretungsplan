@@ -64,7 +64,8 @@ def start(response):
 
             # create a subscription for the user for a school
             school = form_subscribe.cleaned_data["school"]
-            subscription = Subscription(school=school, subscriber=subscr)
+            grade = response.POST.get('grade')
+            subscription = Subscription(school=school, subscriber=subscr, grade=grade)
             try:
                 subscription.save()
                 emailconfirm = EmailMessage('Anmeldebestätigung', 'Body', to=[email])
