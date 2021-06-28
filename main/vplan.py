@@ -11,6 +11,10 @@ class VGrade:
         return self.name + ': ' + self.info
 
 
+# Beispiel Schule mit Website VPlan ist https://gms-kellinghusen.de/vertretungsplan.html
+# da Ferien sind und der Plan dann leer ist, haben wir die Seite temporär und mit Einträgen angereichtert gehostet unter
+# http://schmeckerly.de/kellinghusen/vertretungsplan
+# todo: prefill DB with schools on app init (or provide dump)
 class VPlan:
     def __init__(self, name, url):
         self.website = self.gethtml(url)
@@ -49,9 +53,9 @@ class VPlan:
                 if node:
                     infos = row.select('.v-stunde')
                     infotext = ''
-                    for info in infos:
+                    for std, info in enumerate(infos):
                         if len(info.text) > 0:
-                            infotext += info.text + ' / '
+                            infotext += '=> ' + str(std+1) + '. Stunde: ' + info.text + ' '
                     gradeObj = VGrade(node[0].text, infotext)
                     gradeObjects.append(gradeObj)
                     print(gradeObjects)

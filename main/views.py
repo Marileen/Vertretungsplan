@@ -135,20 +135,30 @@ def thanks(response):
 def send(response):
 
     all_subscriptions = Subscription.objects.all()
+    all_schools = School.objects.all()
+    vplan = None
 
     if response.method == "POST":
         if response.POST.get("send"):
+            # todo: use this below in else
             #filedownload_kopernikus()
             #filedownload_warbel()
             #sendmail2('Kopernikus Gymnasium Bargteheide', 'kopernikus', '2021-06-11')
             #sendmail2('Warbel-Schule Gnoien', 'warbel', '11.06.2021')
 
-            for entry in all_subscriptions:
-                if entry.grade:
-                    print(entry.school)
-                    print(entry.school.url)
-                    vplan = VPlan(entry.school.name, entry.school.url)
+            for school in all_schools:
+                # get VPlan's from schools that provides a website url
+                if school.url:
+                    print(school)
+                    print(school.url)
+                    vplan = VPlan(school.name, school.url)
                     print(vplan.grades)
+
+                if vplan and vplan.grades:
+                    sendmail2(school, '', '', vplan.grades)
+                else:
+                    pass
+                    # todo: send to subscribers for schools with pdf plans as commented above
 
     return render(response, "main/send-messages.html", {
         "sub": all_subscriptions

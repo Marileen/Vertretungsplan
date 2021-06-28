@@ -62,15 +62,20 @@ def sendmail():
         emailtest.send()
 
 
-def sendmail2(schoolname, directory, date):
+def sendmail2(schoolname, directory, date, grades=None):
 
-    # send mails with pdf attachment to "Kopernikus Gymnasium" subscribers
-    # date = datetime.today().strftime('%Y-%m-%d') # aktuelles Tagesdatum
-    school = School.objects.get(name__contains=schoolname)
-    subscriptions = Subscription.objects.filter(school=school)
+    if grades:
+        # send only the info for desired grades to subscribers
+        print('todo: hier messages mit klassen-info senden')
 
-    for i in subscriptions:
+    else:
+        # send mails with pdf attachment to subscribers for the schools that have pdf's
+        # date = datetime.today().strftime('%Y-%m-%d') # aktuelles Tagesdatum
+        school = School.objects.get(name__contains=schoolname)
+        subscriptions = Subscription.objects.filter(school=school)
 
-        emailtest = EmailMessage('Testversand', 'Hallo ' + i.subscriber.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
-        emailtest.attach_file('./downloads/' +directory +'/' + date +'.pdf')
-        emailtest.send()
+        for i in subscriptions:
+
+            emailtest = EmailMessage('Testversand', 'Hallo ' + i.subscriber.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
+            emailtest.attach_file('./downloads/' +directory +'/' + date +'.pdf')
+            emailtest.send()
