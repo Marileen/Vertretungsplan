@@ -138,11 +138,17 @@ def send(response):
 
     if response.method == "POST":
         if response.POST.get("send"):
-            filedownload_kopernikus()
-            filedownload_warbel()
-            #sendmail()
-            sendmail2('Kopernikus Gymnasium Bargteheide', 'kopernikus', '2021-06-11')
-            sendmail2('Warbel-Schule Gnoien', 'warbel', '11.06.2021')
+            #filedownload_kopernikus()
+            #filedownload_warbel()
+            #sendmail2('Kopernikus Gymnasium Bargteheide', 'kopernikus', '2021-06-11')
+            #sendmail2('Warbel-Schule Gnoien', 'warbel', '11.06.2021')
+
+            for entry in all_subscriptions:
+                if entry.grade:
+                    print(entry.school)
+                    print(entry.school.url)
+                    vplan = VPlan(entry.school.name, entry.school.url)
+                    print(vplan.grades)
 
     return render(response, "main/send-messages.html", {
         "sub": all_subscriptions
