@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -136,4 +137,9 @@ EMAIL_HOST_USER = 'oos2021.thl@gmail.com'
 EMAIL_HOST_PASSWORD = getSecret()
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+CRONJOBS = [
+    ('34 21 * * 1-5', 'main.cron.my_scheduled_job')
+]
 
