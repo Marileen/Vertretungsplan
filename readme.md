@@ -48,3 +48,31 @@ Hier entsteht unser Projekt für das Auslesen der Vertretungspläne von Schulen,
 user: franz
 email: franz@th-luebeck.de
 pw: fgq5%tth
+
+## Notify run
+
+Endpoint: https://notify.run/KF9zcKfOKz36VDGO
+
+To subscribe, open: https://notify.run/c/KF9zcKfOKz36VDGO
+
+
+## Notes
+
+### Push Nachrichten 
+Für Push Nachrichten gibt es verschiedene Möglichkeiten:
+Wenn man die Website offen hat, gibt es Browser basierte Push Nachrichten
+- notify.run: Free and open-source (lack of authentication) 
+- Pushpad: Flexible notifications for developers to integrate into their own websites based on the web push notification standard.
+- OneSignal: Free but explicitly indicate they sell you and your users data for their own profit1.
+- Pushjet: Open-source framework used to develop your own push notification services. There are no user accounts, instead devices are subscribed to services (to which messages can be pushed).
+
+ansonsten braucht man einen Provider wie 
+- google cloud engine oder 
+- Amazon SNS
+- apple push
+
+Es gibt auch Python Packages für Slack oder Telegramm
+
+### SMS
+
+- https://dev.telstra.com/
