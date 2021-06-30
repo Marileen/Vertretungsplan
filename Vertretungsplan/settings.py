@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
-from .secret import getSecret
+from .secret import getSecret, getSecretWebpush
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
     'django_crontab',
+    'webpush'
 ]
 
 MIDDLEWARE = [
@@ -142,4 +143,11 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 CRONJOBS = [
     ('34 21 * * 1-5', 'main.cron.my_scheduled_job')
 ]
+
+#Webpush
+WEBPUSH_SETTINGS = {
+   "VAPID_PUBLIC_KEY": "BP4oXPrlX0N7hu6PZ66lw0tIYFeI-jmydNlXrS4LEH-YHDvdJ1PgHs3-zhUm42aiiZ5FZturUJ-SXcRO6vx_wwU",
+   "VAPID_PRIVATE_KEY": getSecretWebpush(),
+   "VAPID_ADMIN_EMAIL": "oos2021.thl@gmail.com"
+}
 

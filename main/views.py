@@ -20,20 +20,24 @@ def index(response, id):
 
 
 def fetch_grades(request):
-    data = None
+    data = {}
+    vPlan = None
 
     if request.method == "POST":
         import json
         post_data = json.loads(request.body.decode("utf-8"))
         school_id = post_data.get("school_id")
-        school = School.objects.get(id=school_id)
 
-        # todo: also fetch vplan in a service when sending ist triggered and school has subscribers for it
-        vplan = VPlan(school.name, school.url)
-
-        data = {
-            'grades': vplan.grades  # School.objects. # todo: get grades from db - fill db previously ...
-        }
+        if len(school_id) < 1:
+            school_id = 0
+        try:
+            school = School.objects.get(id=school_id)
+            vplan = VPlan(school.name, school.url)
+            data = {
+                'grades': vplan.gradeList
+            }
+        except Exception as exc:
+            pass
 
     return JsonResponse(data)
 
@@ -42,6 +46,7 @@ def start(response):
 
     schools = School.objects.all()
     form_subscribe = Subscribe(response.POST)
+    webpush = {"group": 'test'}
 
     if response.method == "POST":
 
@@ -66,10 +71,14 @@ def start(response):
             school = form_subscribe.cleaned_data["school"]
             grade = response.POST.get('grade')
             subscription = Subscription(school=school, subscriber=subscr, grade=grade)
+
             try:
                 subscription.save()
                 emailconfirm = EmailMessage('Anmeldebestätigung', 'Body', to=[email])
                 emailconfirm.send()
+
+                # save school as groupname for web push notifications
+                webpush = {"group": school.name}
 
                 messages.success(response, "Erfolgreich angemeldet für <strong>"
                                  + str(form_subscribe.cleaned_data["school"]) + "</strong>")
@@ -80,7 +89,11 @@ def start(response):
 
             return HttpResponseRedirect('/thanks/')
 
-    return render(response, "main/start.html", {"schools": schools, "form_subscribe": form_subscribe})
+    return render(response, "main/start.html", {
+        "schools": schools,
+        "form_subscribe": form_subscribe,
+        "webpush": webpush,
+    })
 
 
 def edit(response):
@@ -137,6 +150,7 @@ def send(response):
     all_subscriptions = Subscription.objects.all()
     all_schools = School.objects.all()
     vplan = None
+    webpush = {"group": 'test'}
 
     if response.method == "POST":
         if response.POST.get("send"):
@@ -161,6 +175,7 @@ def send(response):
                     # todo: send to subscribers for schools with pdf plans as commented above
 
     return render(response, "main/send-messages.html", {
-        "sub": all_subscriptions
+        "sub": all_subscriptions,
+        "webpush": webpush
     })
 

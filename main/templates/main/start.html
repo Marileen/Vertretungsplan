@@ -1,4 +1,10 @@
 {% extends 'main/base.html' %}
+
+{% block html_head %}
+    {% load webpush_notifications %}
+    {% webpush_header %}
+{% endblock %}
+
 {% block title %}
     Start
 {% endblock %}
@@ -52,6 +58,8 @@
         </fieldset>
         <div class="control-group">
             <button type="submit" name="subscribe" class="btn btn-info">Registrieren</button>
+
+            {% webpush_button with_class="btn btn-outline-info" %}
         </div>
     </form>
 

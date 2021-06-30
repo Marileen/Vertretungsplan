@@ -49,11 +49,11 @@ user: franz
 email: franz@th-luebeck.de
 pw: fgq5%tth
 
-## Notify run
+## Django Webpush
 
-Endpoint: https://notify.run/KF9zcKfOKz36VDGO
+https://github.com/safwanrahman/django-webpush
 
-To subscribe, open: https://notify.run/c/KF9zcKfOKz36VDGO
+Keys generieren: https://web-push-codelab.glitch.me/
 
 
 ## Notes

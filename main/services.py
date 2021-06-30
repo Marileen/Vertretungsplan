@@ -1,6 +1,7 @@
 import urllib.request
 from django.core.mail import EmailMessage
 from main.models import *
+from webpush import send_user_notification, send_group_notification
 from datetime import datetime
 
 
@@ -67,6 +68,8 @@ def sendmail2(schoolname, directory, date, grades=None):
     if grades:
         # send only the info for desired grades to subscribers
         print('todo: hier messages mit klassen-info senden')
+        payload = {"head": "Welcome!", "body": "Hello World"}
+        send_group_notification(group_name="test", payload=payload, ttl=1000)
 
     else:
         # send mails with pdf attachment to subscribers for the schools that have pdf's
