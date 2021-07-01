@@ -65,16 +65,19 @@ def sendmail():
 
 def sendmail2(schoolname, directory, date, grades=None):
 
+    school = School.objects.get(name__contains=schoolname)
+
     if grades:
         # send only the info for desired grades to subscribers
         print('todo: hier messages mit klassen-info senden')
-        payload = {"head": "Welcome!", "body": "Hello World"}
+        payload = {"head": school.name + ' Vertretungsinfo', "body": "TODO",
+                   "icon": 'http://schmeckerly.de/vplan-icon.png',
+                           "url": school.url}
         send_group_notification(group_name="test", payload=payload, ttl=1000)
 
     else:
         # send mails with pdf attachment to subscribers for the schools that have pdf's
         # date = datetime.today().strftime('%Y-%m-%d') # aktuelles Tagesdatum
-        school = School.objects.get(name__contains=schoolname)
         subscriptions = Subscription.objects.filter(school=school)
 
         for i in subscriptions:
