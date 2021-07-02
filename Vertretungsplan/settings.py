@@ -141,7 +141,8 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 CRONJOBS = [
-    ('34 21 * * 1-5', 'main.cron.my_scheduled_job')
+    #('0 6 * * 1-5', 'main.cron.my_scheduled_job')
+    ('* * * * *', 'main.cron.my_scheduled_job')
 ]
 
 #Webpush
