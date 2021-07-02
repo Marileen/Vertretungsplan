@@ -1,4 +1,5 @@
 import urllib.request
+import os
 from django.core.mail import EmailMessage
 from main.models import *
 from webpush import send_user_notification, send_group_notification
@@ -64,7 +65,7 @@ def sendmail():
 
 
 def sendmail2(schoolname, directory, date, grades=None):
-
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
     school = School.objects.get(name__contains=schoolname)
 
     if grades:
@@ -83,5 +84,13 @@ def sendmail2(schoolname, directory, date, grades=None):
         for i in subscriptions:
 
             emailtest = EmailMessage('Testversand', 'Hallo ' + i.subscriber.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
-            emailtest.attach_file('./downloads/' +directory +'/' + date +'.pdf')
+            emailtest.attach_file('../downloads/' +directory +'/' + date +'.pdf')
             emailtest.send()
+
+# Test-Funktion zum Versenden per Cronjob UND von der Website
+def testmail():
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+    # send mails with pdf attachment to "Kopernikus Gymnasium" subscribers
+    test = EmailMessage('Testversand', 'Hallo. Hier kommt der aktuelle Vertretungsplan 2.', to=["wacker@online.de"])
+    test.attach_file('../downloads/kopernikus/2021-06-11.pdf')
+    test.send()
