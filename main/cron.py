@@ -1,7 +1,8 @@
+import main.services
+
 def my_scheduled_job():
     # hier die Funktionen, die per Cronjob ausgeführt werden sollen
-
-
+    main.services.testmail()
 
 
     # Cronjobs "aktivieren"
