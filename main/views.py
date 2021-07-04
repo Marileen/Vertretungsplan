@@ -10,7 +10,7 @@ from django.core.mail import EmailMessage
 from .services import filedownload_kopernikus, filedownload_warbel
 from .vplan import VPlan
 
-from .services import sendmail2
+from .services import send_messages
 
 
 def index(response, id):
@@ -146,28 +146,28 @@ def thanks(response):
 
 
 def send(response):
-
+    """
+    gets VPlans and triggers the sending of e-mail and push notification
+    for all schools
+    rendert die send-messages.html
+    """
     all_subscriptions = Subscription.objects.all()
     all_schools = School.objects.all()
     vplan = None
 
     if response.method == "POST":
         if response.POST.get("send"):
-            # todo: use this below in else
-            #filedownload_kopernikus()
-            #filedownload_warbel()
-            #sendmail2('Kopernikus Gymnasium Bargteheide', 'kopernikus', '2021-06-11')
-            #sendmail2('Warbel-Schule Gnoien', 'warbel', '11.06.2021')
+            filedownload_kopernikus()
+            send_messages('Kopernikus Gymnasium Bargteheide', 'kopernikus', '2021-06-11')
+            filedownload_warbel()
+            send_messages('Warbel-Schule Gnoien', 'warbel', '11.06.2021')
 
             for school in all_schools:
                 # get VPlan's from schools that provides a website url
                 if school.url:
                     vplan = VPlan(school.name, school.url)
                 if vplan and vplan.grades:
-                    sendmail2(school, '', '', vplan.grades)
-                else:
-                    pass
-                    # todo: send to subscribers for schools with pdf plans as commented above
+                    send_messages(school, '', '', vplan.grades)
 
     return render(response, "main/send-messages.html", {
         "sub": all_subscriptions,

@@ -27,53 +27,36 @@ def filedownload_warbel():
 
     # date = datetime.today().strftime('%d.%m.%Y') # aktuelles Tagesdatum
     date = '11.06.2021'  # Testdatum
-
     url = 'http://www.warbel-schule-gnoien.de/.cm4all/uproc.php/0/' + date + '.pdf'
+    filename = ''
 
-    with urllib.request.urlopen(url) as f:
-        pdf = f.read()
-
-    if url.find('/'):
-        filename = 'downloads/warbel/' + url.rsplit('/', 1)[1]
-    open(filename, 'wb').write(pdf)
-    print('Datei ' + filename + ' heruntergeladen')
-
-
-def sendmail():
-
-    # send mails with pdf attachment to "Kopernikus Gymnasium" subscribers
-    # date = datetime.today().strftime('%Y-%m-%d') # aktuelles Tagesdatum
-    date = '2021-06-11'  # Testdatum
-    school_kopernikus = School.objects.get(name__contains='Kopernikus Gymnasium Bargteheide')
-    subscriptions_kopernikus = Subscription.objects.filter(school=school_kopernikus)
-
-    for i in subscriptions_kopernikus:
-
-        emailtest = EmailMessage('Testversand', 'Hallo ' + i.subscriber.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
-        emailtest.attach_file('./downloads/kopernikus/' + date +".pdf")
-        emailtest.send()
+    try:
+        with urllib.request.urlopen(url) as f:
+            pdf = f.read()
+            if url.find('/'):
+                filename = 'downloads/warbel/' + url.rsplit('/', 1)[1]
+            open(filename, 'wb').write(pdf)
+            print('Datei ' + filename + ' heruntergeladen')
+    except urllib.request.HTTPError as exception:
+        print('Error ' + filename + ' NICHT GELADEN')
+        print(exception)
 
 
-    date_warbel = '11.06.2021'  # Testdatum
-    school_warbel = School.objects.get(name__contains='Warbel-Schule Gnoien')
-    subscriptions_warbel = Subscription.objects.filter(school=school_warbel)
-
-    for i in subscriptions_warbel:
-
-        emailtest = EmailMessage('Testversand', 'Hallo ' + i.subscriber.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
-        emailtest.attach_file('./downloads/warbel/' + date_warbel +".pdf")
-        emailtest.send()
-
-
-def sendmail2(schoolname, directory, date, grades=None):
+def send_messages(schoolname, directory, date, grades=None):
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    school = School.objects.get(name__contains=schoolname)
-    subscriptions = Subscription.objects.filter(school=school)
+
+    try:
+        school = School.objects.get(name__contains=schoolname)
+    except:
+       return
+
+    try:
+        subscriptions = Subscription.objects.filter(school=school)
+    except:
+        return
 
     if grades:
         # send only the info for desired grades to subscribers
-        print('todo: hier messages mit klassen-info senden')
-
         for sub in subscriptions:
             gradeName = sub.grade
 
@@ -84,13 +67,19 @@ def sendmail2(schoolname, directory, date, grades=None):
                                    "url": school.url}
                 try:
                     send_group_notification(group_name=school.id, payload=payload, ttl=1000)
-                    payload = {"head": 'TESTGROUP ' + school.name + ' ' + sub.grade + ' Vertretungsinfo',
-                               "body": grades.get(gradeName),
-                               "icon": 'http://schmeckerly.de/vplan-icon.png',
-                               "url": school.url}
-                    send_group_notification(group_name='none', payload=payload, ttl=1000)
+                    # payload = {"head": 'TESTGROUP ' + school.name + ' ' + sub.grade + ' Vertretungsinfo',
+                              #  "body": grades.get(gradeName),
+                               # "icon": 'http://schmeckerly.de/vplan-icon.png',
+                               # "url": school.url}
+                    # send_group_notification(group_name='none', payload=payload, ttl=1000)
                 except ObjectDoesNotExist:
                     pass
+
+                mail = EmailMessage(school.name + ' ' + sub.grade + ' Vertretungsinfo',
+                                        'Hallo ' + sub.subscriber.name +
+                                        '. ' + grades.get(gradeName),
+                                         to=[sub.subscriber.email])
+                mail.send()
 
     else:
         # send mails with pdf attachment to subscribers for the schools that have pdf's
