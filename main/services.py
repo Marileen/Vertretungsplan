@@ -86,9 +86,9 @@ def send_messages(schoolname, directory, date, grades=None):
         # date = datetime.today().strftime('%Y-%m-%d') # aktuelles Tagesdatum
 
         for i in subscriptions:
-            emailtest = EmailMessage('Testversand', 'Hallo ' + i.subscriber.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
-            emailtest.attach_file('../downloads/' +directory +'/' + date +'.pdf')
-            emailtest.send()
+            mail = EmailMessage(school.name + ' Vertretungsinfo', 'Hallo ' + i.subscriber.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
+            mail.attach_file('../downloads/' +directory +'/' + date +'.pdf')
+            mail.send()
 
 
 # Test-Funktion zum Versenden per Cronjob UND von der Website

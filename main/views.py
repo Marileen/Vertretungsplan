@@ -53,8 +53,8 @@ def start(response):
         if form_subscribe.is_valid():
             firstname = form_subscribe.cleaned_data["name"]
             email = form_subscribe.cleaned_data["email"]
-            phone = form_subscribe.cleaned_data["phone"]
-            subscr = Subscriber(name=firstname, email=email, phone=phone)
+            # phone = form_subscribe.cleaned_data["phone"]
+            subscr = Subscriber(name=firstname, email=email)
 
             try:
                 subscr.save()
@@ -62,8 +62,8 @@ def start(response):
             except IntegrityError as e:
                 if 'email' in e.args[0]:  # or e.args[0] from Django 1.10
                     subscr = Subscriber.objects.get(email=email)
-                elif 'phone' in e.args[0]:
-                    subscr = Subscriber.objects.get(phone=phone)
+                # elif 'phone' in e.args[0]:
+                    # subscr = Subscriber.objects.get(phone=phone)
                 else:
                     raise e
 
@@ -147,9 +147,9 @@ def thanks(response):
 
 def send(response):
     """
-    gets VPlans and triggers the sending of e-mail and push notification
-    for all schools
-    rendert die send-messages.html
+    - gets VPlans and triggers the sending of e-mail and push notification
+        for all schools
+    - renders send-messages.html
     """
     all_subscriptions = Subscription.objects.all()
     all_schools = School.objects.all()
