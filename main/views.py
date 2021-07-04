@@ -46,7 +46,6 @@ def fetch_grades(request):
 
 
 def start(response):
-
     schools = School.objects.all()
     form_subscribe = Subscribe(response.POST)
     webpush = {"group": 'test'}
@@ -66,7 +65,7 @@ def start(response):
                 if 'email' in e.args[0]:  # or e.args[0] from Django 1.10
                     subscr = Subscriber.objects.get(email=email)
                 # elif 'phone' in e.args[0]:
-                    # subscr = Subscriber.objects.get(phone=phone)
+                # subscr = Subscriber.objects.get(phone=phone)
                 else:
                     raise e
 
@@ -77,7 +76,11 @@ def start(response):
 
             try:
                 subscription.save()
-                emailconfirm = EmailMessage('Anmeldebestätigung', 'Body', to=[email])
+                emailconfirm = EmailMessage('Anmeldebestätigung Vertretungsinfo',
+                                            'Hallo ' + firstname + ',\nVielen Dank für deine Anmeldung.\n\nAb sofort bekommst Du an jedem Schultag automatisch die aktuellsten Vertretungsinfos für die folgende Schule:\n' + str(
+                                                form_subscribe.cleaned_data[
+                                                    "school"]) + '\n\nViele Grüße\nDein Team von Vertretungsplan24',
+                                            to=[email])
                 emailconfirm.send()
 
                 # save school as groupname for web push notifications
@@ -127,11 +130,11 @@ def edit(response):
                 subscriber = Subscriber.objects.get(email=email)
                 entries = Subscription.objects.filter(subscriber=subscriber)
                 if entries and len(entries) > 0:
-                     info = "Folgende Einträge gefunden"
+                    info = "Folgende Einträge gefunden"
             except ObjectDoesNotExist as e:
                 pass
                 # if 'not exist' in e.args[0]:  # or e.args[0] from Django 1.10
-                    # info = "nix"
+                # info = "nix"
 
     return render(response, "main/edit-subscriptions.html", {
         "form_subscriptions": subscriptions_form,
@@ -173,4 +176,3 @@ def send(response):
     return render(response, "main/send-messages.html", {
         "sub": all_subscriptions,
     })
-
