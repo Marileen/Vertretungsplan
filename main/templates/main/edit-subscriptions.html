@@ -3,6 +3,13 @@
     Start
 {% endblock %}
 
+{% block styles %}
+    input[type=email] {
+        width: 100%;
+        max-width:300px;
+    }
+{% endblock %}
+
 {% block content %}
     <h2>Abfrage der Anmeldungen</h2>
     <p>Gib Deine E-Mail-Adresse ein, um deine Registrierungen abzufragen</p>
@@ -19,10 +26,11 @@
         <form method="post" action="/edit-subscriptions/">
             {% csrf_token %}
             <p>
+                <input type="hidden" name="subscription_id" value="{{ entry.id }}">
                 <input type="hidden" name="subscriber" value="{{ subscriber }}">
                 <input type="hidden" name="school" value="{{ entry }}">
                 <button type="submit" name="delete_subscription" value="delete" class="btn btn-danger btn-sm">X</button>
-                <strong>{{ entry }}</strong>
+                <strong>{{ entry }} - {{ entry.grade }}</strong>
             </p>
         </form>
     {% endfor %}

@@ -109,12 +109,10 @@ def edit(response):
 
         # LÖSCHEN
         if response.POST.get("delete_subscription"):
-            subscriber = Subscriber.objects.get(email=response.POST.get("subscriber"))
-            school = School.objects.get(name=response.POST.get("school"))
             try:
-                del_subscr = Subscription.objects.get(subscriber=subscriber, school=school)
+                del_subscr = Subscription.objects.get(id=response.POST.get("subscription_id"))
                 del_subscr.delete()
-                info = str(school) + " gelöscht"
+                info = del_subscr.school.name + ' - ' + del_subscr.grade + " gelöscht"
             except Exception as e:
                 raise e
                 info = "Fehler - Löschung konnte nicht durchgeführt werden"
