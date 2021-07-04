@@ -57,19 +57,25 @@
             {% endfor %}
         </fieldset>
         <div class="control-group">
-            <button type="submit" name="subscribe" class="btn btn-info">Registrieren</button>
+            <button id="register_submit" type="submit" name="subscribe" class="btn btn-info">
+                Registrieren
+            </button>
+            <div class="invisible">
+                {% webpush_button with_class="btn btn-outline-info" %}
+            </div>
 
-            {% webpush_button with_class="btn btn-outline-info" %}
         </div>
     </form>
 
-    <p></p>
+    <p class="pushinfo"></p>
     <p>Todo: Man kann sich momentan mehrmals mit demselben Subscriber für die dieselbe Schule anmelden,
         das sollten wir noch verhindern</p>
 {% endblock %}
 
 {% block javascript %}
     <script>
+
+        var register_push = false;
 
         function getCookie(name) {
             let cookieValue = null;
@@ -101,11 +107,18 @@
         }
 
         function registerFormChange() {
-            postData('/fetch-grades/', {school_id: document.querySelector('#id_school').value})
+            let schoolID = document.querySelector('#id_school').value;
+            // set data for push message register
+            pushBtn = document.querySelector('#webpush-subscribe-button')
+            if (pushBtn) {
+                pushBtn.dataset.group = schoolID || 'none';
+            }
+            postData('/fetch-grades/', {school_id: schoolID})
                 .then(data => {
 
                     let select = document.getElementById("id_grade")
                     let gradeContainer = document.createElement("div");
+                    register_push = false;
 
                     if (select) {
                         select.required = false;
@@ -113,6 +126,8 @@
                     }
 
                     if (data.grades && data.grades.length > 0) {
+
+                        register_push = true;
 
                         if (!select) {
                             select = document.createElement("select");
@@ -139,6 +154,12 @@
         }
 
         document.querySelector('#id_school').addEventListener('change', registerFormChange);
+        document.querySelector('#register_submit').addEventListener('click', function () {
+            // trigger push notification subscription
+            if (register_push) {
+            document.querySelector('#webpush-subscribe-button').click();
+            }
+        });
 
         (function () {
             registerFormChange();

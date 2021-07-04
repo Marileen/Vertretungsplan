@@ -150,7 +150,6 @@ def send(response):
     all_subscriptions = Subscription.objects.all()
     all_schools = School.objects.all()
     vplan = None
-    webpush = {"group": 'test'}
 
     if response.method == "POST":
         if response.POST.get("send"):
@@ -163,11 +162,7 @@ def send(response):
             for school in all_schools:
                 # get VPlan's from schools that provides a website url
                 if school.url:
-                    print(school)
-                    print(school.url)
                     vplan = VPlan(school.name, school.url)
-                    print(vplan.grades)
-
                 if vplan and vplan.grades:
                     sendmail2(school, '', '', vplan.grades)
                 else:
@@ -176,6 +171,5 @@ def send(response):
 
     return render(response, "main/send-messages.html", {
         "sub": all_subscriptions,
-        "webpush": webpush
     })
 

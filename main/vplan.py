@@ -2,15 +2,6 @@ from bs4 import BeautifulSoup
 import urllib.request
 
 
-class VGrade:
-    def __init__(self, name, info):
-        self.name = name
-        self.info = info
-
-    def __str__(self):
-        return self.name + ': ' + self.info
-
-
 # Beispiel Schule mit Website VPlan ist https://gms-kellinghusen.de/vertretungsplan.html
 # da Ferien sind und der Plan dann leer ist, haben wir die Seite temporär und mit Einträgen angereichtert gehostet unter
 # http://schmeckerly.de/kellinghusen/vertretungsplan
@@ -44,7 +35,7 @@ class VPlan:
         return grades
 
     def getGradeObjects(self):
-        gradeObjects = []
+        gradeDict = {}
         if self.website:
             rows = self.website.select('.v-row')
 
@@ -54,11 +45,10 @@ class VPlan:
                     infos = row.select('.v-stunde')
                     infotext = ''
                     for std, info in enumerate(infos):
+                        # only add grade if it has an info
                         if len(info.text) > 0:
                             infotext += '=> ' + str(std+1) + '. Stunde: ' + info.text + ' '
-                    gradeObj = VGrade(node[0].text, infotext)
-                    gradeObjects.append(gradeObj)
-                    print(gradeObjects)
+                            gradeDict[node[0].text] = infotext
 
-        return gradeObjects
+        return gradeDict
 

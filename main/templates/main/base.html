@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,6 +68,9 @@
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
         crossorigin="anonymous"></script>
 
+{% comment %}
+<script src="{% static '/js/start.js' %}"></script>
+{% endcomment %}
 {% block javascript %}
 
 {% endblock %}
