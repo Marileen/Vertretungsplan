@@ -20,6 +20,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Schule</th>
+                <th scope="col">Klasse</th>
             </tr>
             </thead>
             <tbody>
@@ -31,7 +32,9 @@
                     </td>
                     <td><p>{{ s.subscriber.name }}</p></td>
                     <td><p>{{ s.subscriber.email }}</p></td>
-                     <td><p>{{ s.school }}</p></td>
+                     <td>
+                         <p>{{ s.school }} {% if not s.grade %}<br>(PDF){% endif %}</p></td>
+                     <td><p>{% if s.grade %} {{ s.grade }} {% endif %}</p></td>
                 </tr>
             {% endfor %}
             </tbody>
