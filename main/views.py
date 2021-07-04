@@ -15,11 +15,14 @@ from .services import send_messages
 
 def index(response, id):
     school = School.objects.get(id=id)
-    # return HttpResponse("<h1>erster test: %s</h1><p>%s</p>" %(school.name, grade.name))
     return render(response, "main/base.html", {})
 
 
 def fetch_grades(request):
+    """
+    Endpoint for serving grade data by school_id
+    :return JsonResponse
+    """
     data = {}
     vPlan = None
 
