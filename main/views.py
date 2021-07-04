@@ -104,7 +104,7 @@ def start(response):
 
 def edit(response):
     subscriptions_form = Subscriptions(response.POST)
-    info = '---'
+    info = ''
     entries = None
     email = ''
 
