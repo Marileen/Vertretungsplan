@@ -26,8 +26,11 @@ def filedownload_kopernikus():
 def filedownload_warbel():
 
     # date = datetime.today().strftime('%d.%m.%Y') # aktuelles Tagesdatum
-    date = '11.06.2021'  # Testdatum
-    url = 'http://www.warbel-schule-gnoien.de/.cm4all/uproc.php/0/' + date + '.pdf'
+    date = '11.06.2021'  # ======> Testdatum
+    # ======> warbel school is currently offline because of vacation
+    # ======> url = 'http://www.warbel-schule-gnoien.de/.cm4all/uproc.php/0/' + date + '.pdf'
+    # ======>  for demo, we are hosting some older file:
+    url = 'http://schmeckerly.de/www.warbel-schule-gnoien.de/' + date + '.pdf'
     filename = ''
 
     try:
