@@ -80,7 +80,7 @@ def send_messages(schoolname, directory, date, grades=None):
 
                 mail = EmailMessage(school.name + ' ' + sub.grade + ' Vertretungsinfo',
                                         'Hallo ' + sub.subscriber.name +
-                                        '. ' + grades.get(gradeName),
+                                        '. \n\nHier sind Deine aktuellen Vertretungsinfos:\n' + grades.get(gradeName),
                                          to=[sub.subscriber.email])
                 mail.send()
 
@@ -89,7 +89,7 @@ def send_messages(schoolname, directory, date, grades=None):
         # date = datetime.today().strftime('%Y-%m-%d') # aktuelles Tagesdatum
 
         for i in subscriptions:
-            mail = EmailMessage(school.name + ' Vertretungsinfo', 'Hallo ' + i.subscriber.name +'. Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
+            mail = EmailMessage(school.name + ' Vertretungsinfo', 'Hallo ' + i.subscriber.name +'.\n\n Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
             mail.attach_file('../downloads/' +directory +'/' + date +'.pdf')
             mail.send()
 
