@@ -77,7 +77,7 @@ def start(response):
             try:
                 subscription.save()
                 emailconfirm = EmailMessage('Anmeldebestätigung Vertretungsinfo',
-                                            'Hallo ' + firstname + ',\nVielen Dank für deine Anmeldung.\n\nAb sofort bekommst Du an jedem Schultag automatisch die aktuellsten Vertretungsinfos für die folgende Schule:\n' + str(
+                                            'Hallo ' + firstname + ',\nvielen Dank für deine Anmeldung.\n\nAb sofort bekommst Du an jedem Schultag automatisch die aktuellsten Vertretungsinfos für die folgende Schule:\n' + str(
                                                 form_subscribe.cleaned_data[
                                                     "school"]) + '\n\nViele Grüße\nDein Team von Vertretungsplan24',
                                             to=[email])
