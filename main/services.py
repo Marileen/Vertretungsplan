@@ -8,7 +8,7 @@ from datetime import datetime
 
 
 def filedownload_kopernikus():
-
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
     # date = datetime.today().strftime('%Y-%m-%d') # aktuelles Tagesdatum
     date = '2021-06-11'  # Testdatum
 
@@ -18,13 +18,13 @@ def filedownload_kopernikus():
         pdf = f.read()
 
     if url.find('/'):
-        filename = 'downloads/kopernikus/' + url.rsplit('/', 1)[1]
+        filename = '../downloads/kopernikus/' + url.rsplit('/', 1)[1]
     open(filename, 'wb').write(pdf)
     print('Datei ' + filename + ' heruntergeladen')
 
 
 def filedownload_warbel():
-
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
     # date = datetime.today().strftime('%d.%m.%Y') # aktuelles Tagesdatum
     date = '11.06.2021'  # ======> Testdatum
     # ======> warbel school is currently offline because of vacation
@@ -37,7 +37,7 @@ def filedownload_warbel():
         with urllib.request.urlopen(url) as f:
             pdf = f.read()
             if url.find('/'):
-                filename = 'downloads/warbel/' + url.rsplit('/', 1)[1]
+                filename = '../downloads/warbel/' + url.rsplit('/', 1)[1]
             open(filename, 'wb').write(pdf)
             print('Datei ' + filename + ' heruntergeladen')
     except urllib.request.HTTPError as exception:
