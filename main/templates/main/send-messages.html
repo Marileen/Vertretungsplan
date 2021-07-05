@@ -1,7 +1,7 @@
 {% extends 'main/base.html' %}
 
 {% block title %}
-    Start
+    Versand auslösen
 {% endblock %}
 
 {% block content %}
@@ -16,7 +16,6 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col"></th>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Schule</th>
@@ -26,10 +25,6 @@
             <tbody>
             {% for s in sub %}
                 <tr>
-                    <td>
-                        <input type="checkbox" name="" checked disabled>
-                        <input type="hidden" name="subscriber" value="{{ s.subscriber.email }}">
-                    </td>
                     <td><p>{{ s.subscriber.name }}</p></td>
                     <td><p>{{ s.subscriber.email }}</p></td>
                      <td>

@@ -1,6 +1,6 @@
 {% extends 'main/base.html' %}
 {% block title %}
-    Start
+    Abfragen/Löschen
 {% endblock %}
 
 {% block styles %}
@@ -30,7 +30,7 @@
                 <input type="hidden" name="subscriber" value="{{ subscriber }}">
                 <input type="hidden" name="school" value="{{ entry }}">
                 <button type="submit" name="delete_subscription" value="delete" class="btn btn-danger btn-sm">X</button>
-                <strong>{{ entry }} - {{ entry.grade }}</strong>
+                <strong>{{ entry }}{% if entry.grade %} - {{ entry.grade }}{% endif %}</strong>
             </p>
         </form>
     {% endfor %}
