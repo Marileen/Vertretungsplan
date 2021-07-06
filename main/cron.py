@@ -1,9 +1,8 @@
-import main.services
+from main.services import run_plans
+
 
 def my_scheduled_job():
-    # hier die Funktionen, die per Cronjob ausgeführt werden sollen
-    main.services.testmail()
-
+    run_plans()
 
     # Cronjobs "aktivieren"
     # python manage.py crontab add

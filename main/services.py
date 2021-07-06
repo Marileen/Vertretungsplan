@@ -1,10 +1,11 @@
-import urllib.request
 import os
-from django.core.mail import EmailMessage
-from main.models import *
-from webpush import send_user_notification, send_group_notification
+import urllib.request
+
 from django.core.exceptions import ObjectDoesNotExist
-from datetime import datetime
+from django.core.mail import EmailMessage
+from webpush import send_group_notification
+from main.models import *
+from .vplan import VPlan
 
 
 def filedownload_kopernikus():
@@ -101,3 +102,24 @@ def testmail():
     test = EmailMessage('Testversand', 'Hallo. Hier kommt der aktuelle Vertretungsplan 2.', to=["wacker@online.de"])
     test.attach_file('../downloads/kopernikus/2021-06-11.pdf')
     test.send()
+
+
+def run_plans():
+    all_schools = School.objects.all()
+    vplan = None
+
+    filedownload_kopernikus()
+    # date = datetime.today().strftime('%Y-%m-%d') # aktuelles Tagesdatum
+    date = '2021-06-11'  # Testdatum
+    send_messages('Kopernikus Gymnasium Bargteheide', 'kopernikus', date)
+    filedownload_warbel()
+    # date = datetime.today().strftime('%d.%m.%Y') # aktuelles Tagesdatum
+    date = '11.06.2021'  # ======> Testdatum
+    send_messages('Warbel-Schule Gnoien', 'warbel', date)
+
+    for school in all_schools:
+        # get VPlan's from schools that provides a website url
+        if school.url:
+            vplan = VPlan(school.name, school.url)
+        if vplan and vplan.grades:
+            send_messages(school, '', '', vplan.grades)

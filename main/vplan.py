@@ -30,8 +30,6 @@ class VPlan:
             for grade in grade_nodes:
                 grades.append(grade.text)
 
-            print(grades)
-
         return grades
 
     def getGradeObjects(self):

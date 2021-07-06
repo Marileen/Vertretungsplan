@@ -1,20 +1,17 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.http import JsonResponse
-from .models import School, Subscriber, Subscription
-from .forms import Subscribe, Subscriptions
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.core.mail import EmailMessage
-from .services import filedownload_kopernikus, filedownload_warbel
+from .models import School, Subscriber, Subscription
+from .forms import Subscribe, Subscriptions
+from .services import run_plans
 from .vplan import VPlan
-
-from .services import send_messages
 
 
 def index(response, id):
-    school = School.objects.get(id=id)
     return render(response, "main/base.html", {})
 
 
@@ -156,22 +153,10 @@ def send(response):
     - renders send-messages.html
     """
     all_subscriptions = Subscription.objects.all()
-    all_schools = School.objects.all()
-    vplan = None
 
     if response.method == "POST":
         if response.POST.get("send"):
-            filedownload_kopernikus()
-            send_messages('Kopernikus Gymnasium Bargteheide', 'kopernikus', '2021-06-11')
-            filedownload_warbel()
-            send_messages('Warbel-Schule Gnoien', 'warbel', '11.06.2021')
-
-            for school in all_schools:
-                # get VPlan's from schools that provides a website url
-                if school.url:
-                    vplan = VPlan(school.name, school.url)
-                if vplan and vplan.grades:
-                    send_messages(school, '', '', vplan.grades)
+            run_plans()
 
     return render(response, "main/send-messages.html", {
         "sub": all_subscriptions,
