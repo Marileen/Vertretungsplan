@@ -43,6 +43,10 @@ def fetch_grades(request):
 
 
 def start(response):
+    """
+    Provides Registration Form and Saves Subcriber and Subscriptions
+    :return HTML
+    """
     schools = School.objects.all()
     form_subscribe = Subscribe(response.POST)
     webpush = {"group": 'test'}
@@ -100,6 +104,10 @@ def start(response):
 
 
 def edit(response):
+    """
+    Provides Form to query Subscriptions and delete them
+    :return HTML
+    """
     subscriptions_form = Subscriptions(response.POST)
     info = ''
     entries = None
@@ -142,15 +150,18 @@ def edit(response):
 
 
 def thanks(response):
+    """
+    Thank you page
+    :return HTML
+    """
     subscriptions_form = Subscriptions(response.POST)
     return render(response, "main/thanks.html", {"form_subscriptions": subscriptions_form})
 
 
 def send(response):
     """
-    - gets VPlans and triggers the sending of e-mail and push notification
-        for all schools
-    - renders send-messages.html
+    Trigger Sending via Webpage to test this project
+    :return HTML
     """
     all_subscriptions = Subscription.objects.all()
 
