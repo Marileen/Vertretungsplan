@@ -114,9 +114,11 @@
 
                     let select = document.getElementById("id_grade")
                     let gradeContainer = document.createElement("div");
+                    let hasOptions = false
                     register_push = false;
 
                     if (select) {
+                        hasOptions = true
                         select.required = false;
                         select.classList.add('d-none')
                     }
@@ -136,13 +138,16 @@
                         select.id = "id_grade";
                         select.required = true;
 
-                        for (let i = 0; i < data.grades.length; i++) {
-                            let opt = data.grades[i];
-                            let el = document.createElement("option");
-                            el.textContent = opt;
-                            el.value = opt;
-                            select.appendChild(el);
+                        if (!hasOptions) {
+                            for (let i = 0; i < data.grades.length; i++) {
+                                let opt = data.grades[i];
+                                let el = document.createElement("option");
+                                el.textContent = opt;
+                                el.value = opt;
+                                select.appendChild(el);
+                            }
                         }
+
                         select.classList.remove('d-none')
                     }
 
@@ -153,7 +158,7 @@
         document.querySelector('#register_submit').addEventListener('click', function () {
             // trigger push notification subscription
             if (register_push) {
-            document.querySelector('#webpush-subscribe-button').click();
+                document.querySelector('#webpush-subscribe-button').click();
             }
         });
 
