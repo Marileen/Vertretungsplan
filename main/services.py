@@ -94,7 +94,12 @@ def send_messages(schoolname, directory, date, grades=None):
             mail.attach_file('../downloads/' +directory +'/' + date +'.pdf')
             mail.send()
 
+
 def run_plans():
+    """
+    gets VPlans and triggers the sending of e-mail and push notification
+    for all schools
+    """
     all_schools = School.objects.all()
     vplan = None
 
