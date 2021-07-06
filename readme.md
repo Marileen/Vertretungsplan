@@ -1,22 +1,29 @@
 # Vertretungsplan
 
-Hier entsteht unser Projekt für das Auslesen der Vertretungspläne von Schulen, dass man benachrichtigt werden kann
+Reads content from HTML Website and downloads PDF files 
+from School Websites to provide Vertretungsplan Information 
+to Subscribers
 
-## Nützliche Kommandos
+## Useful Commands
 
-###run server
+## Installation
+<pre>pip install -r requirements.txt</pre>
+
+>> You also need the secret.py file for credentials of webpush and mail
+
+### run server
 <pre>python manage.py runserver</pre>
 
-###Migrationen hinzufügen:
+### Migrationen hinzufügen:
 <pre>python manage.py makemigrations main</pre>
 
-###Migrationen anwenden:
+### Migrationen anwenden:
 <pre>python manage.py migrate</pre>
 
-###Shell (für Datenbank-Abfragen):
+### Shell (für Datenbank-Abfragen):
 <pre>python manage.py shell</pre>
 
-###Daten in DB hinzufügen und abfragen:
+### Daten in DB hinzufügen und abfragen:
 
 1) Starte shell: <pre>python manage.py shell</pre>
 2) Commands:
@@ -49,30 +56,14 @@ user: franz
 email: franz@th-luebeck.de
 pw: fgq5%tth
 
+# Used Packages
+
+## Beautiful Soup
+For reading from Website
+
+## Django Crontab
+To schedule a job that triggers sending of messages
+
 ## Django Webpush
-
+To send browser notifications
 https://github.com/safwanrahman/django-webpush
-
-Keys generieren: https://web-push-codelab.glitch.me/
-
-
-## Notes
-
-### Push Nachrichten 
-Für Push Nachrichten gibt es verschiedene Möglichkeiten:
-Wenn man die Website offen hat, gibt es Browser basierte Push Nachrichten
-- notify.run: Free and open-source (lack of authentication) 
-- Pushpad: Flexible notifications for developers to integrate into their own websites based on the web push notification standard.
-- OneSignal: Free but explicitly indicate they sell you and your users data for their own profit1.
-- Pushjet: Open-source framework used to develop your own push notification services. There are no user accounts, instead devices are subscribed to services (to which messages can be pushed).
-
-ansonsten braucht man einen Provider wie 
-- google cloud engine oder 
-- Amazon SNS
-- apple push
-
-Es gibt auch Python Packages für Slack oder Telegramm
-
-### SMS
-
-- https://dev.telstra.com/
