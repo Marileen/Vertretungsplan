@@ -94,16 +94,6 @@ def send_messages(schoolname, directory, date, grades=None):
             mail.attach_file('../downloads/' +directory +'/' + date +'.pdf')
             mail.send()
 
-
-# Test-Funktion zum Versenden per Cronjob UND von der Website
-def testmail():
-    os.chdir(os.path.dirname(os.path.abspath(__file__)))
-    # send mails with pdf attachment to "Kopernikus Gymnasium" subscribers
-    test = EmailMessage('Testversand', 'Hallo. Hier kommt der aktuelle Vertretungsplan 2.', to=["wacker@online.de"])
-    test.attach_file('../downloads/kopernikus/2021-06-11.pdf')
-    test.send()
-
-
 def run_plans():
     all_schools = School.objects.all()
     vplan = None
