@@ -69,7 +69,7 @@ def send_messages(schoolname, directory, date, grades=None):
                            "icon": 'http://schmeckerly.de/vplan-icon.png',
                                    "url": school.url}
                 try:
-                    send_group_notification(group_name=school.id, payload=payload, ttl=1000)
+                    send_group_notification(group_name=str(school.id), payload=payload, ttl=1000)
                     # payload = {"head": 'TESTGROUP ' + school.name + ' ' + sub.grade + ' Vertretungsinfo',
                               #  "body": grades.get(gradeName),
                                # "icon": 'http://schmeckerly.de/vplan-icon.png',
