@@ -90,7 +90,7 @@ def start(response):
                                  + str(form_subscribe.cleaned_data["school"]) + "</strong>")
             except IntegrityError as e:
                 if 'unique constraint' in e.args[0]:
-                    messages.success(response, "Sie sind bereits registiert für die Schule <strong>"
+                    messages.success(response, "Sie sind bereits registriert für die Schule <strong>"
                                      + str(form_subscribe.cleaned_data["school"]) + "</strong>")
 
             return HttpResponseRedirect('/thanks/')
