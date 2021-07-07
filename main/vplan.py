@@ -5,13 +5,12 @@ import urllib.request
 # Beispiel Schule mit Website VPlan ist https://gms-kellinghusen.de/vertretungsplan.html
 # da Ferien sind und der Plan dann leer ist, haben wir die Seite temporär und mit Einträgen angereichtert gehostet unter
 # http://schmeckerly.de/kellinghusen/vertretungsplan
-# todo: prefill DB with schools on app init (or provide dump)
 class VPlan:
     def __init__(self, name, url):
         self.website = self.gethtml(url)
         self.name = name
-        self.gradeList = self.getGradeList()
-        self.grades = self.getGradeObjects()
+        self.gradeList = self.get_grade_list()
+        self.grades = self.get_grade_objects()
 
     def gethtml(self, url):
         soup = ''
@@ -22,7 +21,7 @@ class VPlan:
 
         return soup
 
-    def getGradeList(self):
+    def get_grade_list(self):
         grades = []
         if self.website:
             grade_nodes = self.website.select('.v-klasse')
@@ -32,8 +31,8 @@ class VPlan:
 
         return grades
 
-    def getGradeObjects(self):
-        gradeDict = {}
+    def get_grade_objects(self):
+        grade_dict = {}
         if self.website:
             rows = self.website.select('.v-row')
 
@@ -46,6 +45,6 @@ class VPlan:
                         # only add grade if it has an info
                         if len(info.text) > 0:
                             infotext += '=> ' + str(std+1) + '. Stunde: ' + info.text + ' '
-                            gradeDict[node[0].text] = infotext
+                            grade_dict[node[0].text] = infotext
 
-        return gradeDict
+        return grade_dict
