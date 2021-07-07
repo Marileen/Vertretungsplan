@@ -1,5 +1,6 @@
 import os
 import urllib.request
+import urllib.error
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
@@ -14,6 +15,7 @@ def filedownload_kopernikus():
     date = '2021-06-11'  # Testdatum
 
     url = 'http://kgbe.de.w010c7c5.kasserver.com/Joomla/files/vplan/' + date + '.pdf'
+    filename = ''
 
     with urllib.request.urlopen(url) as f:
         pdf = f.read()
@@ -41,7 +43,7 @@ def filedownload_warbel():
                 filename = '../downloads/warbel/' + url.rsplit('/', 1)[1]
             open(filename, 'wb').write(pdf)
             print('Datei ' + filename + ' heruntergeladen')
-    except urllib.request.HTTPError as exception:
+    except urllib.error.HTTPError as exception:
         print('Error ' + filename + ' NICHT GELADEN')
         print(exception)
 
@@ -52,7 +54,7 @@ def send_messages(schoolname, directory, date, grades=None):
     try:
         school = School.objects.get(name__contains=schoolname)
     except:
-       return
+        return
 
     try:
         subscriptions = Subscription.objects.filter(school=school)
@@ -62,27 +64,28 @@ def send_messages(schoolname, directory, date, grades=None):
     if grades:
         # send only the info for desired grades to subscribers
         for sub in subscriptions:
-            gradeName = sub.grade
+            grade_name = sub.grade
 
-            if gradeName and len(gradeName) > 0:
+            if grade_name and len(grade_name) > 0:
                 payload = {"head": school.name + ' ' + sub.grade + ' Vertretungsinfo',
-                           "body": grades.get(gradeName),
+                           "body": grades.get(grade_name),
                            "icon": 'http://schmeckerly.de/vplan-icon.png',
-                                   "url": school.url}
+                           "url": school.url}
                 try:
                     send_group_notification(group_name=str(school.id), payload=payload, ttl=1000)
                     # payload = {"head": 'TESTGROUP ' + school.name + ' ' + sub.grade + ' Vertretungsinfo',
-                              #  "body": grades.get(gradeName),
-                               # "icon": 'http://schmeckerly.de/vplan-icon.png',
-                               # "url": school.url}
+                    #  "body": grades.get(grade_name),
+                    # "icon": 'http://schmeckerly.de/vplan-icon.png',
+                    # "url": school.url}
                     # send_group_notification(group_name='none', payload=payload, ttl=1000)
                 except ObjectDoesNotExist:
                     pass
 
                 mail = EmailMessage(school.name + ' ' + sub.grade + ' Vertretungsinfo',
-                                        'Hallo ' + sub.subscriber.name +
-                                        '. \n\nHier sind Deine aktuellen Vertretungsinfos:\n' + grades.get(gradeName),
-                                         to=[sub.subscriber.email])
+                                    'Hallo ' + sub.subscriber.name +
+                                    ',\n\nHier sind Deine aktuellen Vertretungsinfos:\n' + grades.get(
+                                        grade_name) + '\n\nViele Grüße\nDein Team von Vertretungsplan24',
+                                    to=[sub.subscriber.email])
                 mail.send()
 
     else:
@@ -90,8 +93,10 @@ def send_messages(schoolname, directory, date, grades=None):
         # date = datetime.today().strftime('%Y-%m-%d') # aktuelles Tagesdatum
 
         for i in subscriptions:
-            mail = EmailMessage(school.name + ' Vertretungsinfo', 'Hallo ' + i.subscriber.name +'.\n\n Hier kommt der aktuelle Vertretungsplan.' , to=[i.subscriber.email])
-            mail.attach_file('../downloads/' +directory +'/' + date +'.pdf')
+            mail = EmailMessage(school.name + ' Vertretungsinfo',
+                                'Hallo ' + i.subscriber.name + ',\n\nhier kommt der aktuelle Vertretungsplan.' + '\n\nViele Grüße\nDein Team von Vertretungsplan24',
+                                to=[i.subscriber.email])
+            mail.attach_file('../downloads/' + directory + '/' + date + '.pdf')
             mail.send()
 
 
