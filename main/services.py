@@ -76,27 +76,28 @@ def send_messages(schoolname, directory, date, grades=None):
         for sub in subscriptions:
             grade_name = sub.grade
 
-            if grade_name and len(grade_name) > 0:
+            if grade_name and len(grade_name) > 0 and len(grade_name) != 'Klasse':
                 payload = {"head": school.name + ' ' + sub.grade + ' Vertretungsinfo',
                            "body": grades.get(grade_name),
                            "icon": 'http://schmeckerly.de/vplan-icon.png',
                            "url": school.url}
-                try:
-                    send_group_notification(group_name=str(school.id), payload=payload, ttl=1000)
-                    # payload = {"head": 'TESTGROUP ' + school.name + ' ' + sub.grade + ' Vertretungsinfo',
-                    #  "body": grades.get(grade_name),
-                    # "icon": 'http://schmeckerly.de/vplan-icon.png',
-                    # "url": school.url}
-                    # send_group_notification(group_name='none', payload=payload, ttl=1000)
-                except ObjectDoesNotExist:
-                    pass
+                grade = grades.get(grade_name)
+                if grade:
+                    try:
+                        send_group_notification(group_name=str(school.id), payload=payload, ttl=1000)
+                        # payload = {"head": 'TESTGROUP ' + school.name + ' ' + sub.grade + ' Vertretungsinfo',
+                        #  "body": grades.get(grade_name),
+                        # "icon": 'http://schmeckerly.de/vplan-icon.png',
+                        # "url": school.url}
+                        # send_group_notification(group_name='none', payload=payload, ttl=1000)
+                    except ObjectDoesNotExist:
+                        pass
 
-                mail = EmailMessage(school.name + ' ' + sub.grade + ' Vertretungsinfo',
+                    mail = EmailMessage(school.name + ' ' + sub.grade + ' Vertretungsinfo',
                                     'Hallo ' + sub.subscriber.name +
-                                    ',\n\nHier sind Deine aktuellen Vertretungsinfos:\n' + grades.get(
-                                        grade_name) + '\n\nViele Grüße\nDein Team von Vertretungsplan24',
+                                    ',\n\nHier sind Deine aktuellen Vertretungsinfos:\n' + grade + '\n\nViele Grüße\nDein Team von Vertretungsplan24',
                                     to=[sub.subscriber.email])
-                mail.send()
+                    mail.send()
 
     else:
         # send mails with pdf attachment to subscribers for the schools that have pdf's
