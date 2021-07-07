@@ -56,7 +56,8 @@ def filedownload_warbel():
 
 def send_messages(schoolname, directory, date, grades=None):
     """
-    ...
+    send and email and a push message for every subscription
+    and every grade (if given) for the given school
     """
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
