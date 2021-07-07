@@ -21,7 +21,6 @@ def fetch_grades(request):
     :return JsonResponse
     """
     data = {}
-    vPlan = None
 
     if request.method == "POST":
         import json
@@ -123,7 +122,6 @@ def edit(response):
                 info = del_subscr.school.name + ' - ' + del_subscr.grade + " gelöscht"
             except Exception as e:
                 raise e
-                info = "Fehler - Löschung konnte nicht durchgeführt werden"
 
         # ABFRAGEN
         elif response.POST.get("email") and subscriptions_form.is_valid():

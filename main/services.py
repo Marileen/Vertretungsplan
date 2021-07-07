@@ -53,13 +53,13 @@ def send_messages(schoolname, directory, date, grades=None):
 
     try:
         school = School.objects.get(name__contains=schoolname)
-    except Exception:
-        return
+    except Exception as e:
+        raise e
 
     try:
         subscriptions = Subscription.objects.filter(school=school)
-    except Exception:
-        return
+    except Exception as e:
+        raise e
 
     if grades:
         # send only the info for desired grades to subscribers
