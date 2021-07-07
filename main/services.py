@@ -10,6 +10,9 @@ from .vplan import VPlan
 
 
 def filedownload_kopernikus():
+    """
+    downloads the pdf plan of KGB School to download folder
+    """
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     # date = datetime.today().strftime('%Y-%m-%d') # aktuelles Tagesdatum
     date = '2021-06-11'  # Testdatum
@@ -27,6 +30,9 @@ def filedownload_kopernikus():
 
 
 def filedownload_warbel():
+    """
+    downloads the pdf plan of Warbel School to download folder
+    """
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     # date = datetime.today().strftime('%d.%m.%Y') # aktuelles Tagesdatum
     date = '11.06.2021'  # ======> Testdatum
@@ -49,6 +55,9 @@ def filedownload_warbel():
 
 
 def send_messages(schoolname, directory, date, grades=None):
+    """
+    ...
+    """
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
     try:
