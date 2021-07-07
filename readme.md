@@ -9,7 +9,7 @@ to Subscribers
 ## Installation
 <pre>pip install -r requirements.txt</pre>
 
->> You also need the secret.py file for credentials of webpush and mail
+>> You also need the secret.py file in package Vertretungsplan for credentials of webpush and mail
 
 ### run server
 <pre>python manage.py runserver</pre>
