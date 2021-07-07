@@ -49,4 +49,3 @@ class VPlan:
                             gradeDict[node[0].text] = infotext
 
         return gradeDict
-
