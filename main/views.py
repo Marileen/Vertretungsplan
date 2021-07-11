@@ -62,8 +62,7 @@ def start(response):
             subscr = Subscriber(name=firstname, email=email)
             done_register = 1
             messages.success(response, "Du bist erfolgreich angemeldet für <strong>"
-                                       + str(form_subscribe.cleaned_data["school"]) + " " + grade if grade else ''
-                                       + "</strong>")
+                                       + str(form_subscribe.cleaned_data["school"]) + " " + "</strong>")
 
             try:
                 subscr.save()
@@ -95,13 +94,8 @@ def start(response):
                 if 'unique constraint' in e.args[0]:
                     messages.info(response, "Sie sind bereits registriert für die Schule <strong>"
                                      + str(form_subscribe.cleaned_data["school"]) + "</strong>")
-
-            # there is no message when registration for schools without grades
-            # (we don't understand what the message framework does at this point)
-            # but only do the redirect on school registrations without grades, because on a
-            # redirect the JS for push message is not excecuted - also grundsätzlich sollte man das Wegnavigieren lassen
-            if not grade:
-                return HttpResponseRedirect('/thanks/')
+                else:
+                    messages.info(response, "Das hat nicht geklappt, weil: " + e.args[0])
 
     return render(response, "main/start.html", {
         "schools": schools,
