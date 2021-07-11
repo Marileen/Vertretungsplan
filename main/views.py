@@ -119,7 +119,7 @@ def edit(response):
             try:
                 del_subscr = Subscription.objects.get(id=response.POST.get("subscription_id"))
                 del_subscr.delete()
-                info = del_subscr.school.name + ' - ' + del_subscr.grade + " gelöscht"
+                info = del_subscr.school.name + ' - ' + (del_subscr.grade if del_subscr.grade else '') + " gelöscht"
             except Exception as e:
                 raise e
 
