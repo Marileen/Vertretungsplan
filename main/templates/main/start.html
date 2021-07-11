@@ -21,51 +21,60 @@
 
 {% block content %}
     <h2>Registrierung</h2>
+
+    {% if done_register %}
+        {% for message in messages %}
+            <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|safe }}</p>
+        {% endfor %}
+        <p>&nbsp;</p>
+    {% endif %}
+
     <h3>Schule auswählen</h3>
     <form method="post" action="/">
-        {% csrf_token %}
-        {% comment %}
-        {{ form_subscribe.as_p }}
-        {% endcomment %}
+    {% csrf_token %}
+    {% comment %}
+    {{ form_subscribe.as_p }}
+    {% endcomment %}
 
-        <fieldset>
-            <legend>{{ title }}</legend>
-            {% for field in form_subscribe %}
-                {% if field.errors %}
-                    <div class="control-group error">
-                        {% if field.label %}
-                            <label class="control-label">{{ field.label }}</label>
-                        {% endif %}
-                        <div class="controls">{{ field }}
-                            <span class="help-inline">
-                            {% for error in  field.errors %}{{ error }}{% endfor %}
-                        </span>
-                        </div>
+    <fieldset>
+        <legend>{{ title }}</legend>
+        {% for field in form_subscribe %}
+            {% if field.errors %}
+                <div class="control-group error">
+                    {% if field.label %}
+                        <label class="control-label">{{ field.label }}</label>
+                    {% endif %}
+                    <div class="controls">{{ field }}
+                        <span class="help-inline">
+                        {% for error in  field.errors %}{{ error }}{% endfor %}
+                    </span>
                     </div>
-                {% else %}
-                    <div class="control-group">
-                        {% if field.label %}
-                            <label class="control-label">{{ field.label }}</label>
+                </div>
+            {% else %}
+                <div class="control-group">
+                    {% if field.label %}
+                        <label class="control-label">{{ field.label }}</label>
+                    {% endif %}
+                    <div class="controls">{{ field }}
+                        {% if field.help_text %}
+                            <p class="help-inline"><small>{{ field.help_text }}</small></p>
                         {% endif %}
-                        <div class="controls">{{ field }}
-                            {% if field.help_text %}
-                                <p class="help-inline"><small>{{ field.help_text }}</small></p>
-                            {% endif %}
-                        </div>
                     </div>
-                {% endif %}
-            {% endfor %}
-        </fieldset>
-        <div class="control-group">
-            <button id="register_submit" type="submit" name="subscribe" class="btn btn-info">
-                Registrieren
-            </button>
-            <div class="invisible">
-                {% webpush_button with_class="btn btn-outline-info" %}
-            </div>
-
+                </div>
+            {% endif %}
+        {% endfor %}
+    </fieldset>
+    <div class="control-group">
+        <button id="register_submit" type="submit" name="subscribe" class="btn btn-info">
+            Registrieren
+        </button>
+        <div class="invisible">
+            {% webpush_button with_class="btn btn-outline-info" %}
         </div>
-    </form>
+
+    </div>
+</form>
+
 {% endblock %}
 
 {% block javascript %}
@@ -158,7 +167,9 @@
         document.querySelector('#register_submit').addEventListener('click', function () {
             // trigger push notification subscription
             if (register_push) {
-                document.querySelector('#webpush-subscribe-button').click();
+                //document.querySelector('#webpush-subscribe-button').click();
+                // subscribe only, button click toggles subscribe/unsubscribe
+                subscribe(registration)
             }
         });
 
